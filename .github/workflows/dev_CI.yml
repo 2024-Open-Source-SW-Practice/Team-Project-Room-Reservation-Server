@@ -15,6 +15,7 @@ on:
 permissions:
   # 리포지토리 콘텐츠에 대한 읽기 권한만 부여
   contents: read
+  pull-requests: write # PR 코멘트를 위한 권한 추가
 
 jobs:
   build:

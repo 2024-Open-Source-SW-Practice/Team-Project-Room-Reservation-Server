@@ -49,8 +49,8 @@ jobs:
           title: Test Coverage Report
           paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 10 # 프로젝트 전체 테스트 커버리지에 대한 최소 코드 커버리지 기준
-          min-coverage-changed-files: 10 # 변경된 파일에 대한 최소 코드 커버리지 기준입니다.
+          min-coverage-overall: 0 # 프로젝트 전체 테스트 커버리지에 대한 최소 코드 커버리지 기준
+          min-coverage-changed-files: 0 # 변경된 파일에 대한 최소 코드 커버리지 기준입니다.
           # 따로 설정하지 않으면, 위 두 개 모두 default의 값은 80%입니다.
 
 

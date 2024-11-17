@@ -1,10 +1,10 @@
-package com.kyonggi.reservation;
+package com.kyonggi.teampu;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TeamProjectRoomReservationApplicationTests {
+class TeamPuApplicationTests {
 
     @Test
     void contextLoads() {

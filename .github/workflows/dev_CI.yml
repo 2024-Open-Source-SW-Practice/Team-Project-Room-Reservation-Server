@@ -1,0 +1,55 @@
+name: Java CI
+
+# 워크플로우 트리거 조건 설정
+on:
+  pull_request:
+    # develop 브랜치에 대한 PR일 때만 실행
+    branches: [ develop ]
+    # 다음 파일들이 변경되었을 때는 워크플로우를 실행하지 않음
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+
+# GitHub Actions 워크플로우의 권한 설정
+permissions:
+  # 리포지토리 콘텐츠에 대한 읽기 권한만 부여
+  contents: read
+
+jobs:
+  build:
+    # Ubuntu 최신 버전에서 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      # 소스 코드를 체크아웃
+      - uses: actions/checkout@v3
+
+      # JDK 17 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Gradle wrapper에 실행 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      # 프로젝트 빌드 (테스트 제외)
+      # 이전 빌드 결과를 삭제(clean)
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+        shell: bash
+
+      # 단위 테스트 실행 및 Jacoco 테스트 커버리지 리포트 생성
+      #- name: Run unit tests
+      #  run: ./gradlew test jacocoTestReport
+      #  shell: bash
+
+      # 통합 테스트 실행 및 Jacoco 테스트 커버리지 리포트 생성
+      #- name: Run integration tests
+      #  run: ./gradlew integrationTest jacocoTestReport
+      #  shell: bash
+

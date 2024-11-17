@@ -1,13 +1,13 @@
-package com.kyonggi.reservation;
+package com.kyonggi.teampu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TeamProjectRoomReservationApplication {
+public class TeamPuApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TeamProjectRoomReservationApplication.class, args);
+        SpringApplication.run(TeamPuApplication.class, args);
     }
 
 }

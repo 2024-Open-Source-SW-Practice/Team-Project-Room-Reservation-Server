@@ -37,10 +37,9 @@ jobs:
         run: chmod +x gradlew
         shell: bash
 
-      # 프로젝트 빌드 (테스트 제외)
-      # 이전 빌드 결과를 삭제(clean)
-      - name: Build with Gradle
-        run: ./gradlew clean build -x test
+      # 빌드와 테스트를 함께 실행
+      - name: Build and Test with Gradle
+        run: ./gradlew clean build
         shell: bash
 
       # 단위 테스트 실행 및 Jacoco 테스트 커버리지 리포트 생성

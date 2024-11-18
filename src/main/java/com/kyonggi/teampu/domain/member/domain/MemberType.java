@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.member.domain;
+package com.kyonggi.teampu.domain.member.domain;
 
 public enum MemberType {
     UNDERGRADUATE,

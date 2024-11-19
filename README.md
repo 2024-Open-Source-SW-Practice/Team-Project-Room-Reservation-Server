@@ -20,7 +20,7 @@ master(main) ── develop ── feature
 
 - [ ] [깃 플로우](https://techblog.woowahan.com/2553/)를 베이스로 하여 프로젝트 사이즈에 맞게 재정의했습니다.
 - [ ] 이슈 번호는 가장 마지막에 적습니다.
-- [ ] ex) feat/#23, refactor/#11
+# **ex) feat/#23, refactor/#11**
 
 #### master(main)
 

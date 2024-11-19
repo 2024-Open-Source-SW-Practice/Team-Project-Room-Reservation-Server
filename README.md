@@ -19,8 +19,8 @@ master(main) ── develop ── feature
 ```
 
 - [ ] [깃 플로우](https://techblog.woowahan.com/2553/)를 베이스로 하여 프로젝트 사이즈에 맞게 재정의했습니다.
-- [ ] 브랜치 이름은 `cabab-case`를 따릅니다.
 - [ ] 이슈 번호는 가장 마지막에 적습니다.
+- [ ] ex) feat/#23, refactor/#11
 
 #### master(main)
 
@@ -37,9 +37,6 @@ master(main) ── develop ── feature
 #### feature
 
 - [ ] 개별 개발자가 맡은 작업을 개발하는 브랜치입니다.
-- [ ] feat/(feat-name) 과 같이 머릿말을 feat, 꼬릿말을 개발하는 기능으로 명명합니다.
-- [ ] feat-name의 경우 cabab-case를 따릅니다.
-- [ ] ex) feat/login-validation-#23
 
 #### hotfix
 

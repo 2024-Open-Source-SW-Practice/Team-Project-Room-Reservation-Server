@@ -65,7 +65,7 @@ master(main) ── develop ── feature
 | remove           | 파일을 삭제하는 작업만 수행한 경우                                        |
 
 
-- 예) feat: 로그인 기능 추가 - #2
+- 예) feat: 로그인 기능 추가
 
 
 </div>

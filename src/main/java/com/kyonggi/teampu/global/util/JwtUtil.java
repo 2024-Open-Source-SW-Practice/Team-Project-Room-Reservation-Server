@@ -15,19 +15,18 @@ public class JwtUtil {
 	private final SecretKey secretKey;
 
 	public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
-		//secretKey 주입
 		secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
 			Jwts.SIG.HS256.key().build().getAlgorithm());
 	}
 
 	//claim 에서 email 정보 추출
-	public String getMemberEmail(String token) {
+	public String getLoginId(String token) {
 		return Jwts.parser()
 			.verifyWith(secretKey)
 			.build()
 			.parseSignedClaims(token)
 			.getPayload()
-			.get("memberEmail", String.class);
+			.get("loginId", String.class);
 	}
 
 	//claim 에서 토큰 종류 정보 추출
@@ -41,22 +40,20 @@ public class JwtUtil {
 	}
 
 	//claim 에서 토큰 만료 여부 추출
-	public Boolean isExpired(String token) {
+	public boolean isExpired(String token) {
 		try {
 			Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
 			return false;
 		} catch (ExpiredJwtException e) {
-			// 토큰이 만료된 경우
 			return true;
 		}
 	}
 
 	//JWT 토큰 생성 Claim 에는 토큰 종류와 email 만 담음
-	public String createJwt(String category, String userEmail, Long expiredMs) {
-
+	public String createJwt(String category, String loginId, Long expiredMs) {
 		return Jwts.builder()
 			.claim("category", category)
-			.claim("memberEmail", userEmail)
+			.claim("loginId", loginId)
 			.issuedAt(new Date(System.currentTimeMillis()))
 			.expiration(new Date(System.currentTimeMillis() + expiredMs))
 			.signWith(secretKey)
@@ -76,5 +73,4 @@ public class JwtUtil {
 			return false;
 		}
 	}
-
 }

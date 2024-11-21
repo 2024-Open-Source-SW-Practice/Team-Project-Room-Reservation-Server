@@ -1,5 +1,6 @@
 package com.kyonggi.teampu.global.response;
 
+import com.kyonggi.teampu.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,13 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> noContent() {
         return new ApiResponse<>(
                 new Status(HttpStatus.NO_CONTENT, "No Content"),
+                null
+        );
+    }
+
+    public static <T> ApiResponse<T> exception(ErrorCode errorCode) {
+        return new ApiResponse<>(
+                new Status(errorCode.getHttpStatus(), errorCode.getMessage()),
                 null
         );
     }

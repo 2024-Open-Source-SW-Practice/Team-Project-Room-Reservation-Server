@@ -10,9 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ApiResponse<T> {
     private Status status;
-
-    private Metadata metadata;
-
     private List<T> results;
 
     public static <T> ApiResponse<T> ok(List<T> results) {
@@ -29,12 +26,6 @@ public class ApiResponse<T> {
                 new Metadata(1),
                 List.of(body)
         );
-    }
-
-    @Getter
-    @AllArgsConstructor
-    private static class Metadata {
-        private int resultCount = 0;
     }
 
     @Getter

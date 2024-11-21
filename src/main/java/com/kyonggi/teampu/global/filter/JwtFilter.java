@@ -1,7 +1,7 @@
 package com.kyonggi.teampu.global.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kyonggi.teampu.domain.member.domain.CustomMemberDetails;
+import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.repository.MemberRepository;
 import com.kyonggi.teampu.global.exception.ErrorCode;

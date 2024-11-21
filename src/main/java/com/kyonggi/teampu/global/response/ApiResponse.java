@@ -17,6 +17,13 @@ public class ApiResponse<T> {
         );
     }
 
+    public static <T> ApiResponse<T> noContent(T body) {
+        return new ApiResponse<>(
+                new Status(HttpStatus.NO_CONTENT, "No Content"),
+                body
+        );
+    }
+
     @Getter
     @AllArgsConstructor
     private static class Status {

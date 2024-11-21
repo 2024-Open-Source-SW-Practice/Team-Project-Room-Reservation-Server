@@ -17,10 +17,10 @@ public class ApiResponse<T> {
         );
     }
 
-    public static <T> ApiResponse<T> noContent(T body) {
+    public static <T> ApiResponse<T> noContent() {
         return new ApiResponse<>(
                 new Status(HttpStatus.NO_CONTENT, "No Content"),
-                body
+                null
         );
     }
 

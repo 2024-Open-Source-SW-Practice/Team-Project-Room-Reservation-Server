@@ -1,5 +1,6 @@
-package com.kyonggi.teampu.domain.member.domain;
+package com.kyonggi.teampu.domain.auth.domain;
 
+import com.kyonggi.teampu.domain.member.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

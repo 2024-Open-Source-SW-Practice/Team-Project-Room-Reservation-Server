@@ -1,7 +1,7 @@
 package com.kyonggi.teampu.domain.member.controller;
 
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
-import com.kyonggi.teampu.domain.auth.dto.LoginResponse;
+import com.kyonggi.teampu.domain.member.dto.LoginResponse;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;
 import com.kyonggi.teampu.domain.member.service.MemberService;
 import com.kyonggi.teampu.global.response.ApiResponse;

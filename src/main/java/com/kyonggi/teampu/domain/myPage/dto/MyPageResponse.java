@@ -8,7 +8,7 @@ public class MyPageResponse {
     @ToString
     @AllArgsConstructor
     public static class MyPageDTO {
-        private Long loginId;
+        private String loginId;
         private String name;
         private String phoneNumber;
         private String email;

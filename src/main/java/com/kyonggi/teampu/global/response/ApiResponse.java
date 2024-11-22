@@ -13,14 +13,14 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> ok(T body) {
         return new ApiResponse<>(
-                new Status(HttpStatus.OK, "OK"),
+                new Status(HttpStatus.OK, "올바른 요청입니다."),
                 body
         );
     }
 
-    public static <T> ApiResponse<T> noContent() {
+    public static <T> ApiResponse<T> ok() {
         return new ApiResponse<>(
-                new Status(HttpStatus.NO_CONTENT, "No Content"),
+                new Status(HttpStatus.OK, "올바른 요청입니다."),
                 null
         );
     }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyonggi.teampu.domain.auth.domain.RefreshToken;
-import com.kyonggi.teampu.domain.auth.dto.LoginResponse;
+import com.kyonggi.teampu.domain.member.dto.LoginResponse;
 import com.kyonggi.teampu.domain.auth.repository.RefreshTokenRepository;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.repository.MemberRepository;

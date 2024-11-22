@@ -1,6 +1,6 @@
 package com.kyonggi.teampu.domain.member.service;
 
-import com.kyonggi.teampu.domain.auth.dto.LoginResponse;
+import com.kyonggi.teampu.domain.member.dto.LoginResponse;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.domain.MemberType;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;

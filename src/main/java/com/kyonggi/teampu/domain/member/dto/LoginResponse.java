@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.auth.dto;
+package com.kyonggi.teampu.domain.member.dto;
 
 import com.kyonggi.teampu.domain.member.domain.Member;
 import lombok.Getter;

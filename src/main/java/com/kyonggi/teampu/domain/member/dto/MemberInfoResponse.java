@@ -12,7 +12,7 @@ public class MemberInfoResponse {
     private final String department;
     private final String phoneNumber;
     private final String email;
-    private final String memberType;
+    private final String type;
     private final boolean isAdmin;
 
     public MemberInfoResponse(Member member) {
@@ -23,7 +23,7 @@ public class MemberInfoResponse {
         this.department = member.getDepartment();
         this.phoneNumber = member.getPhoneNumber();
         this.email = member.getEmail();
-        this.memberType = member.getType().name();
+        this.type = member.getType().name();
         this.isAdmin = member.getIsAdmin();
     }
 }

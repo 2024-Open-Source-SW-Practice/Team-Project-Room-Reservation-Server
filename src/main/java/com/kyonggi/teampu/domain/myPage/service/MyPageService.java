@@ -18,7 +18,7 @@ public class MyPageService {
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         return new MyPageDTO(
-                member.getId(),
+                member.getLoginId(),
                 member.getName(),
                 member.getPhoneNumber(),
                 member.getEmail()

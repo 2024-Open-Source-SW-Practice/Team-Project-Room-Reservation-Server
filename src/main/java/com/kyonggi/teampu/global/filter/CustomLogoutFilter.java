@@ -127,7 +127,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 	}
 
 	private void createAPIResponse(HttpServletResponse response) throws IOException {
-		ApiResponse<Object> apiResponse = ApiResponse.noContent();
+		ApiResponse<Object> apiResponse = ApiResponse.ok();
 		response.setStatus(HttpStatus.OK.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding("UTF-8");

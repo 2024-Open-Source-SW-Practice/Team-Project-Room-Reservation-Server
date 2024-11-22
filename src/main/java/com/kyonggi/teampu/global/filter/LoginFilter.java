@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyonggi.teampu.domain.auth.domain.RefreshToken;
-import com.kyonggi.teampu.domain.member.dto.LoginResponse;
+import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
 import com.kyonggi.teampu.domain.auth.repository.RefreshTokenRepository;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.repository.MemberRepository;
@@ -131,8 +131,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Transactional
     protected void createUserResponse(HttpServletResponse response, Member member) throws IOException {
-        LoginResponse loginResponse = new LoginResponse(member);
-        ApiResponse<LoginResponse> apiResponse = ApiResponse.ok(loginResponse);
+        MemberInfoResponse memberInfoResponse = new MemberInfoResponse(member);
+        ApiResponse<MemberInfoResponse> apiResponse = ApiResponse.ok(memberInfoResponse);
         response.setStatus(200);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");

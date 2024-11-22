@@ -13,17 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional
     public void join(JoinRequest request) {
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
         Member member = Member.builder()
                 .loginId(request.getLoginId())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .name(request.getName())
                 .college(request.getCollege())
                 .department(request.getDepartment())
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
-                .type(MemberType.findByName(request.getType()))
+                .type(MemberType.valueOf(request.getType()))
                 .build();
 
         memberRepository.save(member);

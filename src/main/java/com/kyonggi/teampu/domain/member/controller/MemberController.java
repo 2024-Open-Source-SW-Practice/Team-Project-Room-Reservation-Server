@@ -1,10 +1,13 @@
 package com.kyonggi.teampu.domain.member.controller;
 
+import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
+import com.kyonggi.teampu.domain.auth.dto.LoginResponse;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;
 import com.kyonggi.teampu.domain.member.service.MemberService;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,13 @@ public class MemberController {
     public ApiResponse<Void> join(@RequestBody JoinRequest request) {
         memberService.join(request);
 
-        return ApiResponse.noContent();
+        return ApiResponse.ok();
+    }
+
+    @GetMapping("/profile")
+    public ApiResponse<LoginResponse> getProfile(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+        Long memberId = customMemberDetails.getMember().getId();
+
+        return ApiResponse.ok(memberService.findById(memberId));
     }
 }

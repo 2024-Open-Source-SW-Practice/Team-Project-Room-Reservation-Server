@@ -4,7 +4,7 @@ import com.kyonggi.teampu.domain.member.domain.Member;
 import lombok.Getter;
 
 @Getter
-public class LoginResponse {
+public class MemberInfoResponse {
     private final Long userId;
     private final String loginId;
     private final String name;
@@ -15,7 +15,7 @@ public class LoginResponse {
     private final String memberType;
     private final boolean isAdmin;
 
-    public LoginResponse(Member member) {
+    public MemberInfoResponse(Member member) {
         this.userId = member.getId();
         this.loginId = member.getLoginId();
         this.name = member.getName();

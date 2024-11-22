@@ -1,7 +1,7 @@
 package com.kyonggi.teampu.domain.member.controller;
 
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
-import com.kyonggi.teampu.domain.member.dto.LoginResponse;
+import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;
 import com.kyonggi.teampu.domain.member.service.MemberService;
 import com.kyonggi.teampu.global.response.ApiResponse;
@@ -28,15 +28,15 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
-    public ApiResponse<LoginResponse> getProfile(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+    public ApiResponse<MemberInfoResponse> getProfile(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         Long memberId = customMemberDetails.getMember().getId();
 
         return ApiResponse.ok(memberService.findById(memberId));
     }
 
     @GetMapping("/members/{memberId}")
-    public ApiResponse<LoginResponse> getMemberInfo(@PathVariable Long memberId) {
-        LoginResponse response = memberService.findById(memberId);
+    public ApiResponse<MemberInfoResponse> getMemberInfo(@PathVariable Long memberId) {
+        MemberInfoResponse response = memberService.findById(memberId);
 
         return ApiResponse.ok(response);
     }

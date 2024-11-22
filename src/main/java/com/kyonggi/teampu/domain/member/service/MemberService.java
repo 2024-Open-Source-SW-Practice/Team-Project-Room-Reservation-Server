@@ -1,6 +1,6 @@
 package com.kyonggi.teampu.domain.member.service;
 
-import com.kyonggi.teampu.domain.member.dto.LoginResponse;
+import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.domain.MemberType;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;
@@ -34,10 +34,10 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public LoginResponse findById(Long memberId) {
+    public MemberInfoResponse findById(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없습니다."));
 
-        return new LoginResponse(member);
+        return new MemberInfoResponse(member);
     }
 }

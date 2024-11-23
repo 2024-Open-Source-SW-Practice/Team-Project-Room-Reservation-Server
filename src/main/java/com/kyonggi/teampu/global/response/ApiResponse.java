@@ -1,5 +1,6 @@
 package com.kyonggi.teampu.global.response;
 
+import com.kyonggi.teampu.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,22 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> ok(T body) {
         return new ApiResponse<>(
-                new Status(HttpStatus.OK, "OK"),
+                new Status(HttpStatus.OK, "올바른 요청입니다."),
                 body
+        );
+    }
+
+    public static <T> ApiResponse<T> ok() {
+        return new ApiResponse<>(
+                new Status(HttpStatus.OK, "올바른 요청입니다."),
+                null
+        );
+    }
+
+    public static <T> ApiResponse<T> exception(ErrorCode errorCode) {
+        return new ApiResponse<>(
+                new Status(errorCode.getHttpStatus(), errorCode.getMessage()),
+                null
         );
     }
 

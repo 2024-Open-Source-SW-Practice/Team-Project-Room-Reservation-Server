@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.mainPage.dto;
+package com.kyonggi.teampu.domain.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

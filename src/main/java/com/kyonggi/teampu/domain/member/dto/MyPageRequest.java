@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.myPage.dto;
+package com.kyonggi.teampu.domain.member.dto;
 
 import lombok.Getter;
 

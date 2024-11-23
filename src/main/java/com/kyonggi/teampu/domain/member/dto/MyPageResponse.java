@@ -1,6 +1,8 @@
-package com.kyonggi.teampu.domain.myPage.dto;
+package com.kyonggi.teampu.domain.member.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
 public class MyPageResponse {
 

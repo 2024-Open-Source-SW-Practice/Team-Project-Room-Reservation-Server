@@ -1,8 +1,8 @@
-package com.kyonggi.teampu.domain.mainPage.service;
+package com.kyonggi.teampu.domain.application.service;
 
 import com.kyonggi.teampu.domain.application.domain.Application;
-import com.kyonggi.teampu.domain.mainPage.dto.MainPageResponse;
-import com.kyonggi.teampu.domain.mainPage.repository.MainPageRepository;
+import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
+import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +17,8 @@ import java.util.Map;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MainPageService {
-
-    private final MainPageRepository mainPageRepository;
+public class ApplicationService {
+    private final ApplicationRepository applicationRepository;
 
     public MainPageResponse.CalendarResponseDTO getCalendarData(Integer year, Integer month) {
         LocalDate now = LocalDate.now();
@@ -44,7 +43,7 @@ public class MainPageService {
         LocalDate endDate = yearMonth.atEndOfMonth();
 
         // 예약 정보 DB 조회
-        List<Application> applications = mainPageRepository.findByAppliedDateBetween(startDate, endDate);
+        List<Application> applications = applicationRepository.findByAppliedDateBetween(startDate, endDate);
 
         Map<LocalDate, Integer> reservationCountByDate = new HashMap<>();
 

@@ -1,8 +1,8 @@
 package com.kyonggi.teampu.admin.service;
 
 import com.kyonggi.teampu.admin.dto.response.AdminAppliedInfoResponse;
-import com.kyonggi.teampu.application.domain.Application;
-import com.kyonggi.teampu.application.repository.ApplicationRepository;
+import com.kyonggi.teampu.domain.application.domain.Application;
+import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;

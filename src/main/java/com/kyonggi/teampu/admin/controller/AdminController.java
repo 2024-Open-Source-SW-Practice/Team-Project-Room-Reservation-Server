@@ -25,4 +25,12 @@ public class AdminController {
     public ApiResponse<List<AdminAppliedInfoResponse>> getHome(){
         return ApiResponse.ok(adminService.getHome());
     }
+
+    /**
+     * 고민 중인 사항이
+     * admin 패키지를 따로 만들자 vs member 패키지에 다 넣어버리자
+     * 인데 어떻게 가는 것이 좋을까요??
+     * + URI에 admin이 들어가는 것이 어떤지? 참고한 우테코 레포는 admin이라는 URI가 있더라구요.
+     *
+     * */
 }

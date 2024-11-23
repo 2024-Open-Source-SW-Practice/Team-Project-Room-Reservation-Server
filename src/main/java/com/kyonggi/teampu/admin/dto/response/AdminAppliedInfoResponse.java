@@ -1,6 +1,6 @@
 package com.kyonggi.teampu.admin.dto.response;
 
-import com.kyonggi.teampu.application.domain.ApplicationStatus;
+import com.kyonggi.teampu.domain.application.domain.ApplicationStatus;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;

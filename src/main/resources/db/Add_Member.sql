@@ -1,4 +1,4 @@
-INSERT INTO Members (IS_ADMIN, MEMBER_ID, COLLEGE, DEPARTMENT, EMAIL, LOGIN_ID, NAME, PASSWORD, PHONE_NUMBER, TYPE) VALUES
+INSERT INTO members (IS_ADMIN, MEMBER_ID, COLLEGE, DEPARTMENT, EMAIL, LOGIN_ID, NAME, PASSWORD, PHONE_NUMBER, TYPE) VALUES
                         (true, 1, 'Business', 'Finance', 'user1@example.com', 'user1', 'Member 1', 'Password1', '010-3113-1028', 'GRADUATE'),
                         (true, 2, 'Science', 'Finance', 'user2@example.com', 'user2', 'Member 2', 'Password2', '010-2982-6360', 'GRADUATE'),
                         (true, 3, 'Arts', 'English', 'user3@example.com', 'user3', 'Member 3', 'Password3', '010-2231-6136', 'GRADUATE'),

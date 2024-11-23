@@ -87,7 +87,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 				.orElseThrow(() -> new InvalidRequestStateException("존재하지 않는 사용자입니다."));
 
         //토큰 생성 - access 토큰 유효기간 30분
-        String accessToken = jwtUtil.createJwt("access", loginId, 30 * 60 * 1000L);
+        String accessToken = jwtUtil.createJwt("access", loginId, 7 * 24 * 60 * 60 * 1000L);
         //토큰 생성 - refresh 토큰 유효기간 1일 (refresh 토큰에서는 사용자 정보를 포함하지 않음)
         String refresh = jwtUtil.createJwt("refresh", "fakeLoginId", 24 * 60 * 60 * 1000L);
         response.addHeader("Authorization", "Bearer " + accessToken);// 헤더에 access 토큰 넣기

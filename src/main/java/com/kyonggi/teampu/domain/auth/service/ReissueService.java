@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 import static com.kyonggi.teampu.global.exception.ErrorCode.*;
 
 @Service
@@ -36,19 +38,11 @@ public class ReissueService {
 	}
 
 	private String getRefreshTokenFromCookies(HttpServletRequest request) {
-		// 쿠키에서 리프레쉬 토큰을 찾아옴
-		String refresh = null;
-		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("refresh")) {
-				refresh = cookie.getValue();
-			}
-		}
-		// 찾을 수 없으면 예외처리
-		if (refresh == null) {
-			throw new IllegalStateException(NOT_FOUND_REFRESH_TOKEN.getMessage());
-		}
-		return refresh;
+		return Arrays.stream(request.getCookies())
+				.filter(cookie -> cookie.getName().equals("refresh"))
+				.map(Cookie::getValue)
+				.findAny()
+				.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_REFRESH_TOKEN.getMessage()));
 	}
 
 	private String validateAndGetLoginId(String refreshToken) {

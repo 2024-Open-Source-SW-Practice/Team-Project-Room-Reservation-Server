@@ -21,20 +21,18 @@ public class ReissueService {
 	private final RefreshTokenRepository refreshTokenRepository;
 
 	public String createNewAccessToken(HttpServletRequest request, HttpServletResponse response) {
-		String refreshToken = getRefreshTokenFromCookies(request); //쿠키에서 토큰 추출
-		String loginId = validateAndGetLoginId(refreshToken); //추출한 토큰 검증 및 유저반환
-		//토큰 생성
-		String newAccess = jwtUtil.createJwt("access", loginId, 30 * 60 * 1000L);
-		String newRefresh = jwtUtil.createJwt("refresh", "fakeLoginId", 24 * 60 * 60 * 1000L);
-		//기존 리프레시 토큰 삭제
-		refreshTokenRepository.deleteById(refreshToken);
-		// 새로운 refresh 토큰 객체 생성 및 Redis 저장
-		RefreshToken newRefreshToken = new RefreshToken(newRefresh, loginId);
-		refreshTokenRepository.save(newRefreshToken);
-		// 새로운 refresh 토큰 쿠키에 삽입
-		response.addHeader("Set-Cookie", createCookie("refresh", newRefresh).toString());
+		String refreshToken = getRefreshTokenFromCookies(request);
+		String loginId = validateAndGetLoginId(refreshToken);
 
-		return newAccess;
+		refreshTokenRepository.deleteById(refreshToken);
+		String newAccessJwt = jwtUtil.createJwt("access", loginId, 30 * 60 * 1000L);
+		String newRefreshJwt = jwtUtil.createJwt("refresh", "fakeLoginId", 24 * 60 * 60 * 1000L);
+		RefreshToken newRefreshToken = new RefreshToken(newRefreshJwt, loginId);
+		refreshTokenRepository.save(newRefreshToken);
+
+		response.addHeader("Set-Cookie", createCookie("refresh", newRefreshJwt).toString());
+
+		return newAccessJwt;
 	}
 
 	private String getRefreshTokenFromCookies(HttpServletRequest request) {
@@ -46,24 +44,19 @@ public class ReissueService {
 	}
 
 	private String validateAndGetLoginId(String refreshToken) {
-		//유효하지 않은 토큰 예외처리
 		if (!jwtUtil.validateToken(refreshToken)) {
 			throw new IllegalStateException(INVALID_REFRESH_TOKEN.getMessage());
 		}
-		//refresh 토큰 만료시 예외처리
 		if (jwtUtil.isExpired(refreshToken)) {
 			throw new IllegalStateException(EXPIRED_REFRESH_TOKEN.getMessage());
 		}
-		//페이로드에 refresh 토큰이 아니면 예외처리 (ex access token)
-		String category = jwtUtil.getCategory(refreshToken);
-		if (!category.equals("refresh")) {
+		if (!jwtUtil.getCategory(refreshToken).equals("refresh")) {
 			throw new IllegalStateException(INVALID_REFRESH_TOKEN.getMessage());
 		}
-		//해당 토큰이 Redis에 저장되어 있지 않으면 예외처리
+
 		RefreshToken refreshTokenEntity = refreshTokenRepository.findById(refreshToken)
 				.orElseThrow(() -> new IllegalStateException(INVALID_REFRESH_TOKEN.getMessage()));
 
-		//Redis 에 Value 값으로 저장되있던 loginId을 반환
 		return refreshTokenEntity.getLoginId();
 	}
 

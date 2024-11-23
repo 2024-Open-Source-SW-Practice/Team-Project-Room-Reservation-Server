@@ -51,15 +51,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         setFilterProcessesUrl(url);
     }
 
-    //로그인 시도시 작동
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
             AuthenticationException {
-        //request 받은 json 값을 추출함
         Map<String, String> loginInfo = getLoginInfoFromJson(request);
         String loginId = loginInfo.get("loginId");
         String password = loginInfo.get("password");
-        //해당 값이 없을시 예외처리
+
         if (loginId == null) {
             throw new InvalidRequestStateException("이메일을 입력해 주세요");
         }
@@ -73,7 +71,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         return authenticationManager.authenticate(authToken);
     }
 
-    //로그인 성공시 작동 - 토큰을 생성하고 해당 내용을 프론ㅌ
     @Override
     protected void successfulAuthentication(
 			HttpServletRequest request,
@@ -81,31 +78,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 			FilterChain chain,
 			Authentication authResult
 	) throws IOException, ServletException {
-        //인증에 성공한 loginId 받아오기
         String loginId = authResult.getName();
         Member member = memberRepository.findByLoginId(loginId)
-				.orElseThrow(() -> new InvalidRequestStateException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new InvalidRequestStateException("존재하지 않는 사용자입니다."));
 
-        //토큰 생성 - access 토큰 유효기간 30분
         String accessToken = jwtUtil.createJwt("access", loginId, 7 * 24 * 60 * 60 * 1000L);
-        //토큰 생성 - refresh 토큰 유효기간 1일 (refresh 토큰에서는 사용자 정보를 포함하지 않음)
         String refresh = jwtUtil.createJwt("refresh", "fakeLoginId", 24 * 60 * 60 * 1000L);
-        response.addHeader("Authorization", "Bearer " + accessToken);// 헤더에 access 토큰 넣기
-        response.addHeader("Set-Cookie", createCookie("refresh", refresh).toString()); //쿠키 생성밒 추가
-        // refresh 토큰 객체 생성 및 Redis 저장
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Set-Cookie", createCookie("refresh", refresh).toString());
+
         RefreshToken refreshToken = new RefreshToken(refresh, loginId);
         refreshTokenRepository.save(refreshToken);
 
-        //API 응답 생성
         createLoginSuccessResponse(response, member);
     }
 
-    //로그인 실패시 작동 - 실패시 json 응답을 작성해 보내는것이 목적
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
-
-        //API 응답 생성 - failed 예외는 BadCredentialsException 하나로만 처리함
+    protected void unsuccessfulAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException failed
+    ) throws IOException, ServletException {
         createLoginFailResponse(response, INCORRECT_AUTH_INFO);
     }
 
@@ -139,7 +132,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         mapper.writeValue(response.getWriter(), apiResponse);
     }
 
-    // JSON 파일을 읽고 반환하는 역할
     private Map<String, String> getLoginInfoFromJson(HttpServletRequest request) {
         if (!"application/json".equals(request.getContentType())) {
             throw new InvalidRequestStateException("JSON 형식이 아닙니다");

@@ -97,8 +97,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshTokenRepository.save(refreshToken);
 
         //API 응답 생성
-        // createAPIResponse(response, REQUEST_OK);
-        createUserResponse(response, member);
+        createLoginSuccessResponse(response, member);
     }
 
     //로그인 실패시 작동 - 실패시 json 응답을 작성해 보내는것이 목적
@@ -107,7 +106,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                               AuthenticationException failed) throws IOException, ServletException {
 
         //API 응답 생성 - failed 예외는 BadCredentialsException 하나로만 처리함
-        createAPIResponse(response, INCORRECT_AUTH_INFO);
+        createLoginFailResponse(response, INCORRECT_AUTH_INFO);
     }
 
     private ResponseCookie createCookie(String key, String value) {
@@ -120,7 +119,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .build();
     }
 
-    private void createAPIResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+    private void createLoginFailResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         ApiResponse apiResponse = ApiResponse.exception(errorCode);
         response.setStatus(errorCode.getHttpStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -130,7 +129,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Transactional
-    protected void createUserResponse(HttpServletResponse response, Member member) throws IOException {
+    protected void createLoginSuccessResponse(HttpServletResponse response, Member member) throws IOException {
         MemberInfoResponse memberInfoResponse = new MemberInfoResponse(member);
         ApiResponse<MemberInfoResponse> apiResponse = ApiResponse.ok(memberInfoResponse);
         response.setStatus(200);

@@ -50,18 +50,18 @@ public class JwtFilter extends OncePerRequestFilter {
         //이하 토큰 검증 실패시 다음 필터로 넘기지 않음
         // 올바르지 않은 토큰(=토큰 검증 실패) 인지 확인
         if (!jwtUtil.validateToken(accessToken)) {
-            createAPIResponse(response, INVALID_AUTH_TOKEN);
+            createExceptionResponse(response, INVALID_AUTH_TOKEN);
             return;
         }
         // 토큰 만료 여부 확인
         if (jwtUtil.isExpired(accessToken)) {
-            createAPIResponse(response, EXPIRED_AUTH_TOKEN);
+            createExceptionResponse(response, EXPIRED_AUTH_TOKEN);
             return;
         }
         //access 토큰인지 확인
         String category = jwtUtil.getCategory(accessToken);
         if (!category.equals("access")) {
-            createAPIResponse(response, INVALID_AUTH_TOKEN);
+            createExceptionResponse(response, INVALID_AUTH_TOKEN);
             return;
         }
 
@@ -71,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //해당 이메일로 가입한 유저가 존재하는지 확인
         if (member.isEmpty()) {
-            createAPIResponse(response, MEMBER_NOT_FOUND);
+            createExceptionResponse(response, MEMBER_NOT_FOUND);
             return;
         }
 
@@ -86,7 +86,7 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void createAPIResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+    private void createExceptionResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         ApiResponse apiResponse = ApiResponse.exception(errorCode);
         response.setStatus(errorCode.getHttpStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

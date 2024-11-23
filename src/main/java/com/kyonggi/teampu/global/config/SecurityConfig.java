@@ -52,7 +52,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //CORS 설정
         http.cors((cors) -> cors
                 .configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
@@ -70,24 +69,28 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_URLS).permitAll()
-                        .anyRequest().authenticated());
+                .requestMatchers(PUBLIC_URLS).permitAll()
+                .anyRequest().authenticated());
 
         http.exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(customEntryPoint));
 
-        //소셜 로그인시 무한 루프 문제 해결을 위해 인가 검증필터는 로그인 필터 이후에 삽입
+
         http.addFilterAfter(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
-                //인증 필터 자리에 커스텀한 로그인 필터 삽입
                 .addFilterAt(
-                        new LoginFilter(authenticationManager(authenticationConfiguration), refreshTokenRepository, jwtUtil,
-                                memberRepository, "/api/login"),
-                        UsernamePasswordAuthenticationFilter.class)
-                //로그아웃 전에 커스텀한 로그아웃 필터 적용
+                        new LoginFilter(
+                                authenticationManager(authenticationConfiguration),
+                                refreshTokenRepository,
+                                jwtUtil,
+                                memberRepository,
+                                "/api/login"),
+                        //소셜 로그인시 무한 루프 문제 해결을 위해 인가 검증필터는 로그인 필터 이후에 삽입
+                        UsernamePasswordAuthenticationFilter.class
+                )
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
 
         http.sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }

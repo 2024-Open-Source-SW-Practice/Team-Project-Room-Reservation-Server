@@ -18,18 +18,10 @@ public class CustomMemberDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-		Optional<Member> member = memberRepository.findByLoginId(loginId);
+		//UserDetails에 담아서 return하면 AutneticationManager가 검증 함
+		Member member = memberRepository.findByLoginId(loginId)
+				.orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다: " + loginId));
 
-		if (member.isEmpty()) {
-			throw new UsernameNotFoundException("해당 유저를 찾을 수 없습니다: " + loginId);
-			//UserDetails에 담아서 return하면 AutneticationManager가 검증 함
-		}
-
-		System.out.println("**************Found user***************");
-		System.out.println("   loginId : " + member.get().getLoginId());
-		System.out.println("   password : " + member.get().getPassword());
-		System.out.println("***************************************");
-
-		return new CustomMemberDetails(member.get());
+		return new CustomMemberDetails(member);
 	}
 }

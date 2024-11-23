@@ -19,7 +19,7 @@ public class JwtUtil {
 			Jwts.SIG.HS256.key().build().getAlgorithm());
 	}
 
-	//claim 에서 email 정보 추출
+	//claim 에서 loginId 정보 추출
 	public String getLoginId(String token) {
 		return Jwts.parser()
 			.verifyWith(secretKey)
@@ -49,7 +49,7 @@ public class JwtUtil {
 		}
 	}
 
-	//JWT 토큰 생성 Claim 에는 토큰 종류와 email 만 담음
+	//JWT 토큰 생성 Claim 에는 토큰 종류와 loginId 만 담음
 	public String createJwt(String category, String loginId, Long expiredMs) {
 		return Jwts.builder()
 			.claim("category", category)

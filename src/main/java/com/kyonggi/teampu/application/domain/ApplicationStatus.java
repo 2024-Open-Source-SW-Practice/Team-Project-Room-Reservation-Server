@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.application.domain;
+package com.kyonggi.teampu.application.domain;
 
 public enum ApplicationStatus {
     PENDING,

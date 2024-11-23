@@ -1,6 +1,6 @@
-package com.kyonggi.teampu.domain.application.domain;
+package com.kyonggi.teampu.application.domain;
 
-import com.kyonggi.teampu.domain.member.domain.Member;
+import com.kyonggi.teampu.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

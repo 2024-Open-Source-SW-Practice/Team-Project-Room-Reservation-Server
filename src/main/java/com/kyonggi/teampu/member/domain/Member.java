@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.member.domain;
+package com.kyonggi.teampu.member.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

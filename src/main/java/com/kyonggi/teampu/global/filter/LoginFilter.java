@@ -52,14 +52,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
-            AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
         Map<String, String> loginInfo = getLoginInfoFromJson(request);
         String loginId = loginInfo.get("loginId");
         String password = loginInfo.get("password");
 
         if (loginId == null) {
-            throw new InvalidRequestStateException("이메일을 입력해 주세요");
+            throw new InvalidRequestStateException("아이디을 입력해 주세요");
         }
         if (password == null) {
             throw new InvalidRequestStateException("비밀번호를 입력해 주세요");
@@ -73,11 +73,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			FilterChain chain,
-			Authentication authResult
-	) throws IOException, ServletException {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult
+    ) throws IOException {
         String loginId = authResult.getName();
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new InvalidRequestStateException("존재하지 않는 사용자입니다."));
@@ -98,7 +98,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException failed
-    ) throws IOException, ServletException {
+    ) throws IOException {
         createLoginFailResponse(response, INCORRECT_AUTH_INFO);
     }
 

@@ -1,24 +1,27 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost:9092/~/teampu
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
-  # H2 Console 설정
-  h2:
-    console: # H2 DB를 웹에서 관리할 수 있는 기능
-      enabled: true           # H2 Console 사용 여부
-      path: /h2-console       # H2 Console 접속 주소
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: '0000'
+    url: jdbc:mysql://localhost:13306/teampu
 
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        show_sql: true
+        show_sql: false
         format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      password:
+      port: 16379
+
+  jwt:
+    secret: FJDNSKN4329JHVUYV2413YGUVFIFDKBGFJTDGFKBEQRFKBJHDVKVFKJSDHLUGKUYTFYTDRTEUFTF
 
 logging:
   level:

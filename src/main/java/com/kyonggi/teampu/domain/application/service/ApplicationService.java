@@ -17,14 +17,13 @@ public class ApplicationService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ApplicationResponse createApplication(ApplicationRequest request) {
-        Member member = memberRepository.findById(request.getMemberId())
+    public ApplicationResponse createApplication(String loginId, ApplicationRequest request) {
+        Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다"));
 
         Application application = request.toEntity(member);
         Application savedApplication = applicationRepository.save(application);
-        ApplicationResponse applicationResponse = ApplicationResponse.of(savedApplication);
 
-        return ApplicationResponse.of(applicationRepository.save(application));
+        return ApplicationResponse.of(savedApplication);
     }
 }

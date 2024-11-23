@@ -1,11 +1,11 @@
 package com.kyonggi.teampu.domain.member.controller;
 
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
-import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;
+import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
+import com.kyonggi.teampu.domain.member.dto.MyPageRequest;
+import com.kyonggi.teampu.domain.member.dto.MyPageResponse;
 import com.kyonggi.teampu.domain.member.service.MemberService;
-import com.kyonggi.teampu.domain.myPage.dto.MyPageRequest;
-import com.kyonggi.teampu.domain.myPage.dto.MyPageResponse;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

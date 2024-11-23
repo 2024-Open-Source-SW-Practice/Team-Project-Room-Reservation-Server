@@ -4,10 +4,13 @@ import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
 import com.kyonggi.teampu.domain.member.dto.JoinRequest;
 import com.kyonggi.teampu.domain.member.service.MemberService;
+import com.kyonggi.teampu.domain.myPage.dto.MyPageRequest;
+import com.kyonggi.teampu.domain.myPage.dto.MyPageResponse;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,5 +42,19 @@ public class MemberController {
         MemberInfoResponse response = memberService.findById(memberId);
 
         return ApiResponse.ok(response);
+    }
+
+    @GetMapping("/profile/{login_id}")
+    public ApiResponse<MyPageResponse.MyPageDTO> findByLoginId(@PathVariable("login_id") String loginId) {
+        MyPageResponse.MyPageDTO memberDTO = memberService.findByLoginId(loginId);
+        return ApiResponse.ok(memberDTO);
+    }
+
+    @PatchMapping("/profile/{login_id}")
+    public ApiResponse<MyPageResponse.MyPageDTO> updateProfile(
+            @PathVariable("login_id") String loginId,
+            @RequestBody MyPageRequest.UpdateProfileDTO updateRequest) {
+        MyPageResponse.MyPageDTO updatedMember = memberService.updateProfile(loginId, updateRequest);
+        return ApiResponse.ok(updatedMember);
     }
 }

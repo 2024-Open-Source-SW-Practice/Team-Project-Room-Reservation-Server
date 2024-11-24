@@ -1,5 +1,6 @@
 package com.kyonggi.teampu.domain.application.domain;
 
+import com.kyonggi.teampu.domain.member.domain.CoParticipant;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,9 +25,6 @@ public class Application {
     @Column(name = "application_id")
     private Long id;
 
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
-
     @Column(name = "applied_date", nullable = false)
     private LocalDate appliedDate;
 
@@ -38,8 +36,11 @@ public class Application {
     private Integer participantCount;
 
     @ElementCollection // JPA에서 값 타입 컬렉션을 매핑할 때 사용하는 어노테이션
-    @Column(name = "co_participant_names")
-    private List<String> coParticipants = new ArrayList<>();
+    @CollectionTable(
+            name = "application_co_participants",
+            joinColumns = @JoinColumn(name = "application_id")
+    )
+    private List<CoParticipant> coParticipants = new ArrayList<>();
 
     @Column(name = "privacy_agreement")
     private Boolean privacyAgreement;

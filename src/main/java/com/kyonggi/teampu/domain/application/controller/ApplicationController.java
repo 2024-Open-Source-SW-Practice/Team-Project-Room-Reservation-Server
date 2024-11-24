@@ -6,10 +6,7 @@ import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +25,15 @@ public class ApplicationController {
         applicationService.createApplication(applicationRequest, customMemberDetails);
 
         return ApiResponse.ok(); // POST에 대해서 리턴 값 필요없음 >> Void
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteApplication(@PathVariable Long id,
+                                               @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        applicationService.deleteApplication(id, customMemberDetails);
+
+        return ApiResponse.ok();
     }
 
 }

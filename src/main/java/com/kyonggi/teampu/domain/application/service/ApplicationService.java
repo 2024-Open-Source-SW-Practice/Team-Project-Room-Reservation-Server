@@ -51,4 +51,13 @@ public class ApplicationService {
         applicationRepository.save(application);
     }
 
+
+    @Transactional
+    public void deleteApplication(Long id, CustomMemberDetails customMemberDetails){
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
+
+        applicationRepository.delete(application);
+    }
+
 }

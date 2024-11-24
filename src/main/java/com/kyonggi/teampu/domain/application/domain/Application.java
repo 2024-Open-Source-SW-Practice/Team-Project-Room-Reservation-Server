@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +24,8 @@ public class Application {
     @Column(name = "application_id")
     private Long id;
 
-    @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
-
-    @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @Column(name = "applied_date", nullable = false)
     private LocalDate appliedDate;
@@ -43,7 +39,7 @@ public class Application {
 
     @ElementCollection // JPA에서 값 타입 컬렉션을 매핑할 때 사용하는 어노테이션
     @Column(name = "co_participant_names")
-    private List<String> coParticipantNames = new ArrayList<>();
+    private List<String> coParticipants = new ArrayList<>();
 
     @Column(name = "privacy_agreement")
     private Boolean privacyAgreement;
@@ -51,4 +47,10 @@ public class Application {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    private String applicantName;    // Member의 name
+    private String applicantLoginId; // Member의 loginId
+    private String applicantPhone;   // Member의 phoneNumber
+    private String applicantEmail;   // Member의 email
+
 }

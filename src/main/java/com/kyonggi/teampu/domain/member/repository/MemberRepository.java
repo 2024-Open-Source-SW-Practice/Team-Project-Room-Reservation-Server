@@ -1,6 +1,7 @@
 package com.kyonggi.teampu.domain.member.repository;
 
 import com.kyonggi.teampu.domain.member.domain.Member;
+
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

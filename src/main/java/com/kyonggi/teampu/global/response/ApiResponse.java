@@ -34,7 +34,7 @@ public class ApiResponse<T> {
 
     @Getter
     @AllArgsConstructor
-    private static class Status {
+    public static class Status {
         private HttpStatus httpStatus;
         private String message;
     }

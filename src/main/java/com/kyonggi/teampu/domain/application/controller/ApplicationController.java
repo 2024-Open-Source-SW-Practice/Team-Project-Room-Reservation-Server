@@ -1,8 +1,6 @@
 package com.kyonggi.teampu.domain.application.controller;
 
-import com.kyonggi.teampu.domain.application.domain.Application;
 import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
-import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
 import com.kyonggi.teampu.domain.application.service.ApplicationService;
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.global.response.ApiResponse;

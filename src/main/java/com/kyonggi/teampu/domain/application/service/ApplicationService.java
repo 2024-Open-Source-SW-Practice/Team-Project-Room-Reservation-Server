@@ -59,4 +59,5 @@ public class ApplicationService {
 
         applicationRepository.delete(application);
     }
+
 }

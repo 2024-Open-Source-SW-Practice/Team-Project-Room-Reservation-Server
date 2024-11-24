@@ -14,4 +14,6 @@ public interface MemberRepository extends Repository<Member, Long> {
     Optional<Member> findById(Long id);
 
     void delete(Member member);
+
+
 }

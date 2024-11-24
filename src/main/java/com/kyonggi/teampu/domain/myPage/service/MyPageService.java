@@ -3,7 +3,7 @@ package com.kyonggi.teampu.domain.myPage.service;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.myPage.dto.MyPageRequest;
 import com.kyonggi.teampu.domain.myPage.dto.MyPageResponse.MyPageDTO;
-import com.kyonggi.teampu.domain.myPage.repository.MemberRepository;
+import com.kyonggi.teampu.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

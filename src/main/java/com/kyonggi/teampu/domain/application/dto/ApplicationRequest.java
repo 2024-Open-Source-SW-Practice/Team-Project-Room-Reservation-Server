@@ -1,4 +1,5 @@
 package com.kyonggi.teampu.domain.application.dto;
+import com.kyonggi.teampu.domain.application.domain.ApplicationStatus;
 import com.kyonggi.teampu.domain.member.dto.CoParticipantRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +20,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ApplicationRequest {
     // 로그인 정보를 통해 이름, 학번, 전화번호, 이메일 받아옴
-    private LocalDate date; // 날짜
+    private LocalDate appliedDate; // 날짜
     private List<CoParticipantRequest> coParticipants; // 공동 참여자 목록 (이름, 전화번호)
     private Boolean privacyAgreement; // 개인정보 동의 여부
+    private ApplicationStatus status;
 
 }

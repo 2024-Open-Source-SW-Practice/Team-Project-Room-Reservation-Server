@@ -3,7 +3,6 @@ package com.kyonggi.teampu.global.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyonggi.teampu.global.exception.ErrorCode;
 import com.kyonggi.teampu.global.response.ApiResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static com.kyonggi.teampu.global.exception.ErrorCode.*;
+import static com.kyonggi.teampu.global.exception.ErrorCode.MEMBER_NOT_AUTHENTICATED;
 
 @Slf4j
 @Component
@@ -24,7 +23,7 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			AuthenticationException e
-	) throws IOException, ServletException {
+	) throws IOException {
 		createAPIResponse(response, MEMBER_NOT_AUTHENTICATED);
 	}
 

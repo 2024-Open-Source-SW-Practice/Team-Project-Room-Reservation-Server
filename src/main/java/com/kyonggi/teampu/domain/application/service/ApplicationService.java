@@ -2,6 +2,7 @@ package com.kyonggi.teampu.domain.application.service;
 
 import com.kyonggi.teampu.domain.application.domain.Application;
 import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
+import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.domain.member.domain.CoParticipant;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.kyonggi.teampu.domain.application.dto.ApplicationResponse.fromEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -60,4 +63,12 @@ public class ApplicationService {
         applicationRepository.delete(application);
     }
 
+    @Transactional
+    public ApplicationResponse getDetailApplication(Long id, CustomMemberDetails customMemberDetails){
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
+
+        return fromEntity(application);
+
+    }
 }

@@ -30,7 +30,7 @@ public class Application {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private ApplicationStatus status;
+    private ApplicationStatus status = ApplicationStatus.PENDING; // 기본값 설정
 
     @Column(name = "participant_count")
     private Integer participantCount;

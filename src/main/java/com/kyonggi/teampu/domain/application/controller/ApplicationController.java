@@ -1,6 +1,7 @@
 package com.kyonggi.teampu.domain.application.controller;
 
 import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
+import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.service.ApplicationService;
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.global.response.ApiResponse;
@@ -35,5 +36,16 @@ public class ApplicationController {
 
         return ApiResponse.ok();
     }
+
+    @GetMapping("/{id}")
+    public ApiResponse<ApplicationResponse> getDetailApplication(@PathVariable Long id,
+                                                                 @AuthenticationPrincipal CustomMemberDetails customMemberDetails){
+        ApplicationResponse applicationResponse = applicationService.getDetailApplication(id, customMemberDetails);
+
+        return ApiResponse.ok(applicationResponse);
+    }
+
+
+
 
 }

@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,6 @@ public class ApplicationService {
         applicationRepository.save(application);
     }
 
-
     @Transactional
     public void deleteApplication(Long id, CustomMemberDetails customMemberDetails){
         Application application = applicationRepository.findById(id)
@@ -71,4 +71,40 @@ public class ApplicationService {
         return fromEntity(application);
 
     }
+
+    @Transactional
+    public void updateApplication(Long id, CustomMemberDetails customMemberDetails, ApplicationRequest applicationRequest){
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
+
+        // PATCH를 사용했기 떄문에 널이 아닌 필드만 업데이트 하는 로직이 필요함
+        LocalDate appliedDate = applicationRequest.getAppliedDate() != null ?
+                applicationRequest.getAppliedDate() : application.getAppliedDate();
+
+        List<CoParticipant> coParticipants = applicationRequest.getCoParticipants() != null ?
+                applicationRequest.getCoParticipants().stream()
+                        .map(CoParticipant::from)
+                        .collect(Collectors.toList()) :
+                application.getCoParticipants();
+
+        Member member = customMemberDetails.getMember();
+
+        // Builder를 사용한 업데이트
+        Application updatedApplication = Application.builder()
+                .member(member)
+                .applicantName(application.getApplicantName()) // 신청자 이름
+                .id(application.getId())
+                .applicantPhone(application.getApplicantPhone())
+                .applicantEmail(application.getApplicantEmail())
+                .applicantLoginId(application.getApplicantLoginId())
+                .appliedDate(appliedDate) // 날짜
+                .coParticipants(coParticipants) // 공동 참여자 명단(이름, 전화번호)
+                .participantCount(application.getParticipantCount()) // 신청자 제외 사용 인원
+                .privacyAgreement(application.getPrivacyAgreement())
+                .status(application.getStatus()) // 상태
+                .build();
+
+        applicationRepository.save(updatedApplication);
+    }
+
 }

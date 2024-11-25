@@ -45,7 +45,12 @@ public class ApplicationController {
         return ApiResponse.ok(applicationResponse);
     }
 
-
-
+    @PatchMapping("/{id}")
+    public ApiResponse<Void> updateApplication(@PathVariable Long id,
+                                                              @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+                                                              @RequestBody ApplicationRequest applicationRequest){
+        applicationService.updateApplication(id, customMemberDetails, applicationRequest);
+        return ApiResponse.ok();
+    }
 
 }

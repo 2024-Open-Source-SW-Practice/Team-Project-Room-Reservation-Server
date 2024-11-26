@@ -1,9 +1,13 @@
 package com.kyonggi.teampu.domain.member.dto;
 
 import com.kyonggi.teampu.domain.member.domain.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class MemberInfoResponse {
     private final Long userId;
     private final String loginId;
@@ -26,4 +30,5 @@ public class MemberInfoResponse {
         this.type = member.getType().name();
         this.isAdmin = member.getIsAdmin();
     }
+
 }

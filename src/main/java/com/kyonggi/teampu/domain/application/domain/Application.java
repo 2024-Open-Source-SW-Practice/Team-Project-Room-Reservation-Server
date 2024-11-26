@@ -49,4 +49,8 @@ public class Application {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void updateStatus(ApplicationStatus status){
+        this.status = status;
+    }
 }

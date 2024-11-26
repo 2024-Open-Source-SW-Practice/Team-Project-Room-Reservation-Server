@@ -32,7 +32,7 @@ public class AdminController {
     }
 
     @PostMapping("/approve")
-    public ApiResponse<Void> approve(@RequestBody ApproveRequest request,
+    public ApiResponse<Void> updateStatus(@RequestBody ApproveRequest request,
                                     @AuthenticationPrincipal CustomMemberDetails customMemberDetails){
         adminService.approve(request, customMemberDetails.getMember());
 

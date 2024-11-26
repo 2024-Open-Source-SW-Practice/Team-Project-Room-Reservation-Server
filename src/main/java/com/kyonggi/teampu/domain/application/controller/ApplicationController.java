@@ -1,19 +1,34 @@
 package com.kyonggi.teampu.domain.application.controller;
 
+import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
 import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.service.ApplicationService;
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/apply")
+@RequiredArgsConstructor
 public class ApplicationController {
     private final ApplicationService applicationService;
+
+    // 로그인 전 전체 예약 정보 확인
+    @GetMapping("/home")
+    public ApiResponse<MainPageResponse.CalendarResponseDTO> getCalendarData(
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month
+    ) {
+        MainPageResponse.CalendarResponseDTO response = applicationService.getCalendarData(year, month);
+        return ApiResponse.ok(response);
+    }
 
     /**
      * 신청서 작성 API

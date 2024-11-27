@@ -26,10 +26,10 @@ public class Application {
     @Column(name = "application_id")
     private Long id;
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time", nullable = false, columnDefinition = "TIMESTAMP(0)") // 밀리초 자릿수를 0으로 지정
     private LocalDateTime startTime;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time", nullable = false, columnDefinition = "TIMESTAMP(0)") // 밀리초 자릿수를 0으로 지정
     private LocalDateTime endTime;
 
     @Column(name = "applied_date", nullable = false)
@@ -39,8 +39,11 @@ public class Application {
     @Column(name = "status", nullable = false)
     private ApplicationStatus status = ApplicationStatus.PENDING; // 기본값 설정
 
-    @Column(name = "participant_count")
-    private Integer participantCount;
+    @Column(name = "count_cp_with_applicant") // 신청자 포함 사용 인원 수
+    private Integer countCpWithApplicant;
+
+    @Column(name = "count_cp_only") // 신청자 제외 사용 인원 수
+    private Integer countCpOnly;
 
     @ElementCollection // JPA에서 값 타입 컬렉션을 매핑할 때 사용하는 어노테이션
     @CollectionTable(
@@ -59,10 +62,5 @@ public class Application {
     public void updateStatus(ApplicationStatus status){
         this.status = status;
     }
-
-    private String applicantName;    // Member의 name
-    private String applicantLoginId; // Member의 loginId
-    private String applicantPhone;   // Member의 phoneNumber
-    private String applicantEmail;   // Member의 email
 
 }

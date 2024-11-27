@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ApplicationRequest {
     // 로그인 정보를 통해 이름, 학번, 전화번호, 이메일 받아옴
+    private LocalDateTime startTime; // 시작 시간
+    private LocalDateTime endTime; // 종료 시간
     private LocalDate appliedDate; // 날짜
     private List<CoParticipantRequest> coParticipants; // 공동 참여자 목록 (이름, 전화번호)
     private Boolean privacyAgreement; // 개인정보 동의 여부

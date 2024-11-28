@@ -2,17 +2,17 @@ name: Spring docker image build and push to Docker Hub
 
 on:
   push:
-    branches: [ test/Github-action ]
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
-      - '.gitignore'
-  pull_request:
     branches: [ test ]
     paths-ignore:
       - '**.md'
       - 'docs/**'
       - '.gitignore'
+  #pull_request:
+    #branches: [ test ]
+    #paths-ignore:
+      #- '**.md'
+      #- 'docs/**'
+      #- '.gitignore'
 
 
 permissions:

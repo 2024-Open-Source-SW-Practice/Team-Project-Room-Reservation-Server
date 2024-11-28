@@ -34,6 +34,11 @@ jobs:
       - name: Setup Gradle # gradle 셋업
         uses: gradle/gradle-build-action@v2
 
+      - name: DB secret capture
+        run: |
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
       - name: Build # JAR 빌드
         run: |
             chmod +x ./gradlew

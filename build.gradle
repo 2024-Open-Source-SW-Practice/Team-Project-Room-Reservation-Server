@@ -60,6 +60,6 @@ jacocoTestReport {
 }
 
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }

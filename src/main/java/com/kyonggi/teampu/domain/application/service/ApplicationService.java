@@ -44,15 +44,13 @@ public class ApplicationService {
 
         // Application.builder()를 사용하여 로그인한 사용자 정보와 입력받은 정보를 결합
         Application application = Application.builder()
-                .member(member) // memberId
-                .applicantName(member.getName()) // 이름
-                .applicantLoginId(member.getLoginId()) // 학번
-                .applicantPhone(member.getPhoneNumber()) // 전화번호
-                .applicantEmail(member.getEmail()) // 이메일
-
+                .member(member) // Member 객체만
                 .appliedDate(applicationRequest.getAppliedDate()) // 날짜
+                .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
+                .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
                 .coParticipants(coParticipants) // 명단(이름, 전화번호)
-                .participantCount(applicationRequest.getCoParticipants().size() + 1) // 사용 인원 자동 계산
+                .countCpWithApplicant(applicationRequest.getCoParticipants().size()+1) // 신청자 포함 사용 인원 수
+                .countCpOnly(applicationRequest.getCoParticipants().size()) // 신청자 제외 사용 인원 수
                 .privacyAgreement(applicationRequest.getPrivacyAgreement()) // 개인정보 동의
                 .status(applicationRequest.getStatus())
                 .startTime(LocalDateTime.now())
@@ -96,15 +94,14 @@ public class ApplicationService {
 
         // Builder를 사용한 업데이트
         Application updatedApplication = Application.builder()
-                .member(member)
-                .applicantName(application.getApplicantName()) // 신청자 이름
                 .id(application.getId())
-                .applicantPhone(application.getApplicantPhone())
-                .applicantEmail(application.getApplicantEmail())
-                .applicantLoginId(application.getApplicantLoginId())
+                .member(application.getMember())  // 기존 member 정보 유지
                 .appliedDate(appliedDate) // 날짜
+                .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
+                .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
                 .coParticipants(coParticipants) // 공동 참여자 명단(이름, 전화번호)
-                .participantCount(application.getParticipantCount()) // 신청자 제외 사용 인원
+                .countCpWithApplicant(applicationRequest.getCoParticipants().size()+1) // 신청자 포함 사용 인원 수
+                .countCpOnly(applicationRequest.getCoParticipants().size()) // 신청자 제외 사용 인원 수
                 .privacyAgreement(application.getPrivacyAgreement())
                 .status(application.getStatus()) // 상태
                 .build();

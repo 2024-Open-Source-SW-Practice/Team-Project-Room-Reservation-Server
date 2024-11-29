@@ -33,20 +33,20 @@ public class ApplicationController {
 
     /**
      * 신청서 작성 API
-     * */
+     */
     @PostMapping
-    public ApiResponse<Void> createApplication(@RequestBody ApplicationRequest applicationRequest,
-                                               @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+    public ApiResponse<Void> createApplication(
+            @RequestBody ApplicationRequest applicationRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
         // @AuthenticationPrincipal 스프링 시큐리티 활용해서 사용자 정보 받아옴
-
         applicationService.createApplication(applicationRequest, customMemberDetails.getMember());
 
         return ApiResponse.ok(); // POST에 대해서 리턴 값 필요없음 >> Void
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteApplication(@PathVariable Long id,
-                                               @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+    public ApiResponse<Void> deleteApplication(@PathVariable Long id) {
 
         applicationService.deleteApplication(id);
 
@@ -54,19 +54,19 @@ public class ApplicationController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<ApplicationResponse> getDetailApplication(@PathVariable Long id,
-                                                                 @AuthenticationPrincipal CustomMemberDetails customMemberDetails){
+    public ApiResponse<ApplicationResponse> getDetailApplication(@PathVariable Long id) {
         ApplicationResponse applicationResponse = applicationService.getDetailApplication(id);
 
         return ApiResponse.ok(applicationResponse);
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<Void> updateApplication(@PathVariable Long id,
-                                                              Member member,
-                                                              @RequestBody ApplicationRequest applicationRequest){
+    public ApiResponse<Void> updateApplication(
+            @PathVariable Long id,
+            Member member,
+            @RequestBody ApplicationRequest applicationRequest
+    ) {
         applicationService.updateApplication(id, member, applicationRequest);
         return ApiResponse.ok();
     }
-
 }

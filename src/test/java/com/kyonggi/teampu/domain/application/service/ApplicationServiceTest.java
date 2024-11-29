@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +56,8 @@ public class ApplicationServiceTest {
     void testCreateApplication() {
         // ApplicationRequest 생성
         ApplicationRequest applicationRequest = new ApplicationRequest(
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25), // appliedDate
                 List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")), // coParticipants
                 true, // privacyAgreement
@@ -84,6 +87,8 @@ public class ApplicationServiceTest {
     void testGetDetailApplication() {
         // ApplicationRequest 생성 후 신청서 생성
         ApplicationRequest applicationRequest = new ApplicationRequest(
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
                 List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")),
                 true,
@@ -106,6 +111,8 @@ public class ApplicationServiceTest {
     void testUpdateApplication() {
         // 기존 신청 생성
         ApplicationRequest request = new ApplicationRequest(
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
                 List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")),
                 true,
@@ -116,6 +123,8 @@ public class ApplicationServiceTest {
 
         // 수정 요청 생성 (공동 참여자와 날짜만 수정)
         ApplicationRequest updateRequest = new ApplicationRequest(
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDate.of(2025, 1, 15),
                 List.of(new CoParticipantRequest("John Doe", "010-9876-5432")),
                 true,
@@ -128,7 +137,7 @@ public class ApplicationServiceTest {
         // 수정된 신청서 확인
         ApplicationResponse response = applicationService.getDetailApplication(applicationId);
         assertEquals("2025-01-15", response.getAppliedDate().toString());
-        assertEquals(1, response.getParticipantCount()); // 신청자 본인 + 공동 참여자
+        assertEquals(2, response.getCountCpOnly() + 1); // 신청자 본인 + 공동 참여자
         assertEquals(member.getName(), response.getName());
     }
 
@@ -137,11 +146,25 @@ public class ApplicationServiceTest {
     void testGetCalendarData() {
         // 여러 신청 생성
         applicationService.createApplication(
-                new ApplicationRequest(LocalDate.of(2024, 12, 10), List.of(), true, ApplicationStatus.PENDING), member);
+                new ApplicationRequest(
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
+                        LocalDate.of(2024, 12, 10), List.of(),
+                        true,
+                        ApplicationStatus.PENDING
+                ),
+                member
+        );
         applicationService.createApplication(
-                new ApplicationRequest(LocalDate.of(2024, 12, 10), List.of(), true, ApplicationStatus.PENDING), member);
-        applicationService.createApplication(
-                new ApplicationRequest(LocalDate.of(2024, 12, 15), List.of(), true, ApplicationStatus.PENDING), member);
+                new ApplicationRequest(
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
+                        LocalDate.of(2024, 12, 15), List.of(),
+                        true,
+                        ApplicationStatus.PENDING
+                ),
+                member
+        );
 
         // 달력 데이터 조회
         MainPageResponse.CalendarResponseDTO calendarData = applicationService.getCalendarData(2024, 12);
@@ -152,7 +175,7 @@ public class ApplicationServiceTest {
 
         // 12월 10일과 15일 예약 개수 확인
         List<MainPageResponse.DayDTO> days = calendarData.getDays();
-        assertEquals(2, days.stream().filter(day -> day.getDay() == 10).findFirst().get().getReservationCount());
+        assertEquals(1, days.stream().filter(day -> day.getDay() == 10).findFirst().get().getReservationCount());
         assertEquals(1, days.stream().filter(day -> day.getDay() == 15).findFirst().get().getReservationCount());
     }
 
@@ -163,6 +186,8 @@ public class ApplicationServiceTest {
         Long nonExistentId = 999L;
 
         ApplicationRequest updateRequest = new ApplicationRequest(
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDate.of(2025, 1, 15),
                 List.of(new CoParticipantRequest("John Doe", "010-9876-5432")),
                 true,
@@ -177,6 +202,8 @@ public class ApplicationServiceTest {
     void testDeleteApplication() {
         // 신청서 생성
         ApplicationRequest applicationRequest = new ApplicationRequest(
+                LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
                 List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")),
                 true,

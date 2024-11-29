@@ -47,7 +47,7 @@ public class ApplicationController {
     public ApiResponse<Void> deleteApplication(@PathVariable Long id,
                                                @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        applicationService.deleteApplication(id, customMemberDetails);
+        applicationService.deleteApplication(id);
 
         return ApiResponse.ok();
     }
@@ -55,7 +55,7 @@ public class ApplicationController {
     @GetMapping("/{id}")
     public ApiResponse<ApplicationResponse> getDetailApplication(@PathVariable Long id,
                                                                  @AuthenticationPrincipal CustomMemberDetails customMemberDetails){
-        ApplicationResponse applicationResponse = applicationService.getDetailApplication(id, customMemberDetails);
+        ApplicationResponse applicationResponse = applicationService.getDetailApplication(id);
 
         return ApiResponse.ok(applicationResponse);
     }
@@ -64,7 +64,7 @@ public class ApplicationController {
     public ApiResponse<Void> updateApplication(@PathVariable Long id,
                                                               @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
                                                               @RequestBody ApplicationRequest applicationRequest){
-        applicationService.updateApplication(id, customMemberDetails, applicationRequest);
+        applicationService.updateApplication(id, applicationRequest);
         return ApiResponse.ok();
     }
 

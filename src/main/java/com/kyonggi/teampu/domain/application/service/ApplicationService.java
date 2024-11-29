@@ -5,7 +5,6 @@ import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
-import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.domain.member.domain.CoParticipant;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public void createApplication(ApplicationRequest applicationRequest, CustomMemberDetails customMemberDetails) {
+    public void createApplication(ApplicationRequest applicationRequest, Member member) {
         // GET 메서드를 별도로 구현할 예정이라 void 처리
 
         /**
@@ -38,7 +38,6 @@ public class ApplicationService {
          * 3. 사용 인원 계산
          */
 
-        Member member = customMemberDetails.getMember();
         List<CoParticipant> coParticipants = applicationRequest.getCoParticipants().stream()
                 .map(CoParticipant::from)
                 .collect(Collectors.toList());
@@ -46,23 +45,25 @@ public class ApplicationService {
         // Application.builder()를 사용하여 로그인한 사용자 정보와 입력받은 정보를 결합
         Application application = Application.builder()
                 .member(member) // memberId
-                .applicantName(customMemberDetails.getMember().getName()) // 이름
-                .applicantLoginId(customMemberDetails.getMember().getLoginId()) // 학번
-                .applicantPhone(customMemberDetails.getMember().getPhoneNumber()) // 전화번호
-                .applicantEmail(customMemberDetails.getMember().getEmail()) // 이메일
+                .applicantName(member.getName()) // 이름
+                .applicantLoginId(member.getLoginId()) // 학번
+                .applicantPhone(member.getPhoneNumber()) // 전화번호
+                .applicantEmail(member.getEmail()) // 이메일
 
                 .appliedDate(applicationRequest.getAppliedDate()) // 날짜
                 .coParticipants(coParticipants) // 명단(이름, 전화번호)
                 .participantCount(applicationRequest.getCoParticipants().size() + 1) // 사용 인원 자동 계산
                 .privacyAgreement(applicationRequest.getPrivacyAgreement()) // 개인정보 동의
                 .status(applicationRequest.getStatus())
+                .startTime(LocalDateTime.now())
+                .endTime(LocalDateTime.now())
                 .build();
 
         applicationRepository.save(application);
     }
 
     @Transactional
-    public void deleteApplication(Long id, CustomMemberDetails customMemberDetails){
+    public void deleteApplication(Long id){
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
 
@@ -70,7 +71,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public ApplicationResponse getDetailApplication(Long id, CustomMemberDetails customMemberDetails){
+    public ApplicationResponse getDetailApplication(Long id){
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
 
@@ -79,7 +80,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void updateApplication(Long id, CustomMemberDetails customMemberDetails, ApplicationRequest applicationRequest){
+    public void updateApplication(Long id, Member member, ApplicationRequest applicationRequest){
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
 
@@ -92,8 +93,6 @@ public class ApplicationService {
                         .map(CoParticipant::from)
                         .collect(Collectors.toList()) :
                 application.getCoParticipants();
-
-        Member member = customMemberDetails.getMember();
 
         // Builder를 사용한 업데이트
         Application updatedApplication = Application.builder()

@@ -5,6 +5,7 @@ import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.service.ApplicationService;
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
+import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class ApplicationController {
                                                @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         // @AuthenticationPrincipal 스프링 시큐리티 활용해서 사용자 정보 받아옴
 
-        applicationService.createApplication(applicationRequest, customMemberDetails);
+        applicationService.createApplication(applicationRequest, customMemberDetails.getMember());
 
         return ApiResponse.ok(); // POST에 대해서 리턴 값 필요없음 >> Void
     }
@@ -47,7 +48,7 @@ public class ApplicationController {
     public ApiResponse<Void> deleteApplication(@PathVariable Long id,
                                                @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        applicationService.deleteApplication(id, customMemberDetails);
+        applicationService.deleteApplication(id);
 
         return ApiResponse.ok();
     }
@@ -55,16 +56,16 @@ public class ApplicationController {
     @GetMapping("/{id}")
     public ApiResponse<ApplicationResponse> getDetailApplication(@PathVariable Long id,
                                                                  @AuthenticationPrincipal CustomMemberDetails customMemberDetails){
-        ApplicationResponse applicationResponse = applicationService.getDetailApplication(id, customMemberDetails);
+        ApplicationResponse applicationResponse = applicationService.getDetailApplication(id);
 
         return ApiResponse.ok(applicationResponse);
     }
 
     @PatchMapping("/{id}")
     public ApiResponse<Void> updateApplication(@PathVariable Long id,
-                                                              @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+                                                              Member member,
                                                               @RequestBody ApplicationRequest applicationRequest){
-        applicationService.updateApplication(id, customMemberDetails, applicationRequest);
+        applicationService.updateApplication(id, member, applicationRequest);
         return ApiResponse.ok();
     }
 

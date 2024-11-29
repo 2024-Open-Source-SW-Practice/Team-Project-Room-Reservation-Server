@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.member.repository;
+package com.kyonggi.teampu.domain.member.service;
 
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.domain.MemberType;
@@ -6,7 +6,7 @@ import com.kyonggi.teampu.domain.member.dto.JoinRequest;
 import com.kyonggi.teampu.domain.member.dto.MemberInfoResponse;
 import com.kyonggi.teampu.domain.member.dto.MyPageRequest;
 import com.kyonggi.teampu.domain.member.dto.MyPageResponse;
-import com.kyonggi.teampu.domain.member.service.MemberService;
+import com.kyonggi.teampu.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

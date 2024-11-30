@@ -1,10 +1,10 @@
 package com.kyonggi.teampu.domain.member.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
+@Setter
 public class JoinRequest {
     private String loginId;
     private String password;

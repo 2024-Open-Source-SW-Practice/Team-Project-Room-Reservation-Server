@@ -1,0 +1,85 @@
+name: Spring docker image build and push to Docker Hub
+
+on:
+  push:
+    branches: [ develop ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+
+permissions:
+  contents: write
+
+jobs:
+  Deploy-docker-image:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3 # repo에 있는 파일들 self-host 머신에 복제
+      - name: Set up JDK 17 # jdk 셋업 17로 해야되나??
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle # gradle 셋업
+        uses: gradle/gradle-build-action@v2
+
+      - name: DB secret capture
+        run: |
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Build # JAR 빌드
+        run: |
+            chmod +x ./gradlew
+            ./gradlew build -Dspring.profiles.active=CD
+
+      - name: Set lowercase repository name without owner environment variable
+        run: |
+            echo "REPOSITORY_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]' | cut -d'/' -f2)" >> $GITHUB_ENV
+
+      - name: Get lowercase branch name
+        run: |
+            echo "BRANCH_NAME=$(echo $GITHUB_REF_NAME | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Get docker image name
+        run: |
+            echo "IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/${{ env.REPOSITORY_NAME }}:${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
+
+      - name: Build spring docker image
+        run: |
+            docker build -t ${{ env.IMAGE_NAME }} .
+            docker tag ${{ env.IMAGE_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPOSITORY_NAME }}:latest
+
+      - name: Push docker image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ env.IMAGE_NAME }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPOSITORY_NAME }}:latest
+
+  Deploy:
+    needs: Deploy-docker-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3 # repo에 있는 파일들 self-host 머신에 복제 
+      - name: Transport docker-compose.yaml to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_SECRET_ACCESS_KEY }}
+          overwrite: true
+          source: ./manifest/spring-redis.yml
+          target: ~/spring-redis
+
+      - name: Connect to AWS EC2 with SSH
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_SECRET_ACCESS_KEY }}
+          script: sudo kubectl apply -f ~/spring-redis/spring-redis.yml

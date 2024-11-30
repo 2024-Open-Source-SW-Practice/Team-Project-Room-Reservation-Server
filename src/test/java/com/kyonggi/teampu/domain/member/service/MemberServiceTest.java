@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static com.kyonggi.teampu.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.kyonggi.teampu.global.exception.ErrorCode.MEMBER_NOT_FOUND_BY_LOGIN_ID;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 @DisplayName("MemberService 테스트")
 class MemberServiceTest {
     @Autowired

@@ -26,3 +26,19 @@ services:
       - REDIS_PASSWORD=
       - REDIS_PORT=16379
       - TZ=Asia/Seoul
+
+  controller:
+    image: ngrinder/controller
+    restart: always
+    ports:
+      - "9000:80"
+      - "16001:16001"
+      - "12000-12009:12000-12009"
+    volumes:
+      - ./ngrinder-controller:/opt/ngrinder-controller
+
+  agent:
+    image: ngrinder/agent
+    restart: always
+    links:
+      - controller

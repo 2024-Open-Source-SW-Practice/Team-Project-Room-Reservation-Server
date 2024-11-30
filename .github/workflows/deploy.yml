@@ -1,4 +1,4 @@
-name: Spring docker image build and push to Docker Hub
+name: Deploy spring-boot app to GCP k3s cluster
 
 on:
   push:
@@ -72,14 +72,16 @@ jobs:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SECRET_ACCESS_KEY }}
+          passphrase: ${{ secrets.GCP_SECRET_ACCESS_KEY_PASSPHRASE }}
           overwrite: true
           source: ./manifest/spring-redis.yml
           target: ~/spring-redis
 
-      - name: Connect to AWS EC2 with SSH
+      - name: Connect to GCP with SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SECRET_ACCESS_KEY }}
+          passphrase: ${{ secrets.GCP_SECRET_ACCESS_KEY_PASSPHRASE }}
           script: sudo kubectl apply -f ~/spring-redis/spring-redis.yml

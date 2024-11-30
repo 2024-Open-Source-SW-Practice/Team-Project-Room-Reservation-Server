@@ -2,18 +2,11 @@ name: Spring docker image build and push to Docker Hub
 
 on:
   push:
-    branches: [ test ]
+    branches: [ develop ]
     paths-ignore:
       - '**.md'
       - 'docs/**'
       - '.gitignore'
-  #pull_request:
-    #branches: [ test ]
-    #paths-ignore:
-      #- '**.md'
-      #- 'docs/**'
-      #- '.gitignore'
-
 
 permissions:
   contents: write
@@ -44,18 +37,6 @@ jobs:
             chmod +x ./gradlew
             ./gradlew build
 
-          #- name: Create Test Coverage Report
-          # run: ./gradlew jacocoTestReport
-
-          #- name: Upload coverage to Codecov
-          # uses: codecov/codecov-action@v3.1.1
-          #with:
-        # file: ./build/reports/jacoco/test/jacocoTestReport.xml
-
-        #- name: Unpack JAR # 언팩
-        # run: |
-        #  mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
-
       - name: Set lowercase repository name without owner environment variable
         run: |
             echo "REPOSITORY_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]' | cut -d'/' -f2)" >> $GITHUB_ENV
@@ -72,18 +53,9 @@ jobs:
         run: |
             docker build -t ${{ env.IMAGE_NAME }} .
             docker tag ${{ env.IMAGE_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPOSITORY_NAME }}:latest
-    
-
-      #- name: Build nginx docker image
-        #run: |
-          #cd nginx
-          #docker build -t rokgeun/nginx:develop .
-          #docker tag rokgeun/nginx:develop rokgeun/nginx:latest
 
       - name: Push docker image
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ${{ env.IMAGE_NAME }}
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPOSITORY_NAME }}:latest
-        #  docker push rokgeun/nginx:develop
-        #  docker push rokgeun/nginx:latest

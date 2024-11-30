@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: test
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+  data:
+    redis:
+      host: localhost
+      password:
+      port: 16379
+
+  jwt:
+    secret: FJDNSKN4329JHVUYV2413YGUVFIFDKBGFJTDGFKBEQRFKBJHDVKVFKJSDHLUGKUYTFYTDRTEUFTF

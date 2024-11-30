@@ -84,4 +84,4 @@ jobs:
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SECRET_ACCESS_KEY }}
           passphrase: ${{ secrets.GCP_SECRET_ACCESS_KEY_PASSPHRASE }}
-          script: sudo kubectl apply -f ~/spring-redis/spring-redis.yml
+          script: kubectl apply -f ~/spring-redis/spring-redis.yml

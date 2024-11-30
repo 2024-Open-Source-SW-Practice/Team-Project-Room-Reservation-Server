@@ -57,6 +57,23 @@ jacocoTestReport {
         xml.required = true
         html.required = true
     }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            "**/*Application*",
+                            "**/*Controller*",
+                            "**/*Config*",
+                            "**/*Dto*",
+                            "**/*Request*",
+                            "**/*Response*",
+                            "**/*Interceptor*",
+                            "**/*Exception*"
+                    ])
+                })
+        )
+    }
 }
 
 jacocoTestCoverageVerification {

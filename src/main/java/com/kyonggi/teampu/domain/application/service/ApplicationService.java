@@ -5,13 +5,14 @@ import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
-import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.domain.member.domain.CoParticipant;
+import com.kyonggi.teampu.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public void createApplication(ApplicationRequest applicationRequest, CustomMemberDetails customMemberDetails) {
+    public void createApplication(ApplicationRequest applicationRequest, Member member) {
         // GET 메서드를 별도로 구현할 예정이라 void 처리
 
         /**
@@ -43,8 +44,7 @@ public class ApplicationService {
 
         // Application.builder()를 사용하여 로그인한 사용자 정보와 입력받은 정보를 결합
         Application application = Application.builder()
-                .member(customMemberDetails.getMember()) // Member 객체만 전달
-
+                .member(member) // Member 객체만
                 .appliedDate(applicationRequest.getAppliedDate()) // 날짜
                 .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
                 .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
@@ -53,6 +53,8 @@ public class ApplicationService {
                 .countCpOnly(applicationRequest.getCoParticipants().size()) // 신청자 제외 사용 인원 수
                 .privacyAgreement(applicationRequest.getPrivacyAgreement()) // 개인정보 동의
                 .status(applicationRequest.getStatus())
+                .startTime(LocalDateTime.now())
+                .endTime(LocalDateTime.now())
                 .build();
 
         applicationRepository.save(application);
@@ -72,10 +74,11 @@ public class ApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
 
         return fromEntity(application);
+
     }
 
     @Transactional
-    public void updateApplication(Long id, ApplicationRequest applicationRequest){
+    public void updateApplication(Long id, Member member, ApplicationRequest applicationRequest){
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
 
@@ -93,7 +96,6 @@ public class ApplicationService {
         Application updatedApplication = Application.builder()
                 .id(application.getId())
                 .member(application.getMember())  // 기존 member 정보 유지
-
                 .appliedDate(appliedDate) // 날짜
                 .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
                 .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
@@ -151,5 +153,4 @@ public class ApplicationService {
 
         return new MainPageResponse.CalendarResponseDTO(targetYear, targetMonth, days);
     }
-
 }

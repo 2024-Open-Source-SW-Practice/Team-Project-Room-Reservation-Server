@@ -43,7 +43,7 @@ dependencies {
 }
 
 test {
-    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestReport, jacocoTestCoverageVerification
     useJUnitPlatform()
 }
 
@@ -57,8 +57,41 @@ jacocoTestReport {
         xml.required = true
         html.required = true
     }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            "**/*Application*",
+                            "**/*Controller*",
+                            "**/*Config*",
+                            "**/*Dto*",
+                            "**/*Request*",
+                            "**/*Response*",
+                            "**/*Interceptor*",
+                            "**/*Exception*",
+                            "**/*Filter*",
+                            "**/*Reissue*",
+                            "**/*Util*",
+                            "**/*CustomMemberDetails*",
+                            "**/*Refresh*",
+                    ])
+                })
+        )
+    }
 }
 
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+
+            excludes = [
+                    '*.test.*'
+            ]
+        }
+    }
+}
 
 test {
     useJUnitPlatform()

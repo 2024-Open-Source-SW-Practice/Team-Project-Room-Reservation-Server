@@ -29,32 +29,21 @@ class MemberServiceTest {
     private MemberService memberService;
     @Autowired
     private MemberRepository memberRepository;
-    private JoinRequest joinRequest;
     private Member member;
 
     @BeforeEach
     void setUp() {
-        joinRequest = new JoinRequest(
-                "loginId1",
-                "password1",
-                "member1",
-                "소프트웨어경영대학",
-                "AI컴퓨터공학부",
-                "010-1234-5678",
-                "member1@kyonggi.ac.kr",
-                "UNDERGRADUATE"
-        );
 
         // 회원 가입 요청을 Member 객체로 변환
         member = Member.builder()
-                .loginId(joinRequest.getLoginId())
-                .password(joinRequest.getPassword())
-                .name(joinRequest.getName())
-                .college(joinRequest.getCollege())
-                .department(joinRequest.getDepartment())
-                .phoneNumber(joinRequest.getPhoneNumber())
-                .email(joinRequest.getEmail())
-                .type(MemberType.valueOf(joinRequest.getType()))
+                .loginId("loginId1")
+                .password("password1")
+                .name("member1")
+                .college("소프트웨어경영대학")
+                .department("AI컴퓨터공학부")
+                .phoneNumber("010-1234-5678")
+                .email("member1@kyonggi.ac.kr")
+                .type(MemberType.valueOf("UNDERGRADUATE"))
                 .build();
         memberRepository.save(member);
     }
@@ -63,16 +52,15 @@ class MemberServiceTest {
     @DisplayName("회원을 저장한다.")
     void saveMember() {
         // given
-        JoinRequest joinRequest = new JoinRequest(
-                "loginId2",
-                "password2",
-                "member2",
-                "소프트웨어경영대학",
-                "AI컴퓨터공학부",
-                "010-9876-5432",
-                "member2@kyonggi.ac.kr",
-                "UNDERGRADUATE"
-        );
+        JoinRequest joinRequest = new JoinRequest();
+        joinRequest.setLoginId("loginId2");
+        joinRequest.setPassword("password2");
+        joinRequest.setName("member2");
+        joinRequest.setCollege("소프트웨어경영대학");
+        joinRequest.setDepartment("AI컴퓨터공학부");
+        joinRequest.setPhoneNumber("010-9876-5432");
+        joinRequest.setEmail("member2@kyonggi.ac.kr");
+        joinRequest.setType("UNDERGRADUATE");
 
         // when
         memberService.join(joinRequest);

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     List<Application> findByAppliedDateBetween(LocalDate startDate, LocalDate endDate);
 
-    @EntityGraph(attributePaths = {"member"}) // fetch join 사용
+    @EntityGraph(attributePaths = {"applicant"}) // fetch join 사용
     Optional<Application> findById(Long id);
 
 }

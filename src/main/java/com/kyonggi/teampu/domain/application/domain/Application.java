@@ -33,6 +33,7 @@ public class Application {
     private LocalDate appliedDate;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(name = "status", nullable = false)
     private ApplicationStatus status = ApplicationStatus.PENDING; // 기본값 설정
 

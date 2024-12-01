@@ -34,7 +34,6 @@ public class ApplicationRequest {
                 .appliedDate(appliedDate) // 날짜
                 .startTime(startTime.withSecond(0).withNano(0)) // 시작 시간
                 .endTime(endTime.withSecond(0).withNano(0)) // 종료 시간
-                .status(ApplicationStatus.PENDING) // 기본값 설정
                 .applicantCount(coApplicants.size() + 1) // 신청자 포함 사용 인원 수
                 .applicant(member) // Member 객체만
                 .build();

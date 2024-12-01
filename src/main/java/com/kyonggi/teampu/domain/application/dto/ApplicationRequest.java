@@ -24,8 +24,6 @@ public class ApplicationRequest {
     private LocalDateTime startTime; // 시작 시간
     private LocalDateTime endTime; // 종료 시간
     private LocalDate appliedDate; // 날짜
-    private List<CoParticipantRequest> coParticipants; // 공동 참여자 목록 (이름, 전화번호)
-    private Boolean privacyAgreement; // 개인정보 동의 여부
-    private ApplicationStatus status;
+    private List<CoApplicantRequest> coApplicants; // 공동 참여자 목록 (이름, 전화번호)
 
 }

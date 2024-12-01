@@ -34,12 +34,13 @@ public class ApplicationServiceTest {
     private ApplicationRepository applicationRepository;
     @Autowired
     private MemberRepository memberRepository;
-    private Member member;
+    private Member applicant;
+    private Member coApplicant;
 
     @BeforeEach
     void setUp() {
         // 빌더 패턴을 사용해 Member 객체 생성
-        member = Member.builder()
+        applicant = Member.builder()
                 .loginId("loginId1")
                 .password("password1")
                 .name("member1")
@@ -49,22 +50,35 @@ public class ApplicationServiceTest {
                 .email("member1@kyonggi.ac.kr")
                 .type(MemberType.UNDERGRADUATE)
                 .build();
-        memberRepository.save(member);
+        memberRepository.save(applicant);
+
+        coApplicant = Member.builder()
+                .loginId("loginId2")
+                .password("password2")
+                .name("member2")
+                .college("소프트웨어경영대학")
+                .department("AI컴퓨터공학부")
+                .phoneNumber("010-1234-5679")
+                .email("member1@kyonggi.ac.kr")
+                .type(MemberType.UNDERGRADUATE)
+                .build();
+
+        memberRepository.save(coApplicant);
     }
 
     @Test
-    @DisplayName("신청서를 테스트한다.")
+    @DisplayName("신청을 생성한다.")
     void testCreateApplication() {
         // ApplicationRequest 생성
         ApplicationRequest applicationRequest = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25), // appliedDate
-                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789")) // coParticipants
+                List.of(new CoApplicantRequest("member2", "010-1234-5679")) // coParticip9nts
         );
 
         // 신청서 생성
-        applicationService.createApplication(applicationRequest, member);
+        applicationService.createApplication(applicationRequest, applicant);
 
         // 생성된 신청서 조회
         assertNotNull(applicationRepository.findAll());
@@ -82,16 +96,16 @@ public class ApplicationServiceTest {
     }
 
     @Test
-    @DisplayName("신청서를 조회한다.")
+    @DisplayName("신청을 조회한다.")
     void testGetDetailApplication() {
         // ApplicationRequest 생성 후 신청서 생성
         ApplicationRequest applicationRequest = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
-                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789"))
+                List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
-        applicationService.createApplication(applicationRequest, member);
+        applicationService.createApplication(applicationRequest, applicant);
 
         // 방금 생성된 신청서 조회
         Long applicationId = applicationRepository.findAll().get(0).getId();
@@ -100,20 +114,20 @@ public class ApplicationServiceTest {
         // 응답 값 검증
         assertNotNull(response);
         assertEquals("2024-12-25", response.getAppliedDate().toString());
-        assertEquals(member.getName(), response.getName());
+        assertEquals(applicant.getName(), response.getName());
     }
 
     @Test
-    @DisplayName("신청서를 수정한다.")
+    @DisplayName("신청을 수정한다.")
     void testUpdateApplication() {
         // 기존 신청 생성
         ApplicationRequest request = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
-                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789"))
+                List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
-        applicationService.createApplication(request, member);
+        applicationService.createApplication(request, applicant);
         Long applicationId = applicationRepository.findAll().get(0).getId();
 
         // 수정 요청 생성 (공동 참여자와 날짜만 수정)
@@ -121,17 +135,17 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2025, 1, 15),
-                List.of(new CoApplicantRequest("John Doe", "010-9876-5432"))
+                List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
 
         // 신청 수정
-        applicationService.updateApplication(applicationId, member, updateRequest);
+        applicationService.updateApplication(applicationId, applicant, updateRequest);
 
         // 수정된 신청서 확인
         ApplicationResponse response = applicationService.getDetailApplication(applicationId);
         assertEquals("2025-01-15", response.getAppliedDate().toString());
-        assertEquals(2, response.getApplicantCount() + 1); // 신청자 본인 + 공동 참여자
-        assertEquals(member.getName(), response.getName());
+        assertEquals(2, response.getApplicantCount()); // 신청자 본인 + 공동 참여자
+        assertEquals(applicant.getName(), response.getName());
     }
 
     @Test
@@ -144,7 +158,7 @@ public class ApplicationServiceTest {
                         LocalDateTime.now(),
                         LocalDate.of(2024, 12, 10), List.of()
                 ),
-                member
+                applicant
         );
         applicationService.createApplication(
                 new ApplicationRequest(
@@ -152,7 +166,7 @@ public class ApplicationServiceTest {
                         LocalDateTime.now(),
                         LocalDate.of(2024, 12, 15), List.of()
                 ),
-                member
+                applicant
         );
 
         // 달력 데이터 조회
@@ -178,23 +192,24 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2025, 1, 15),
-                List.of(new CoApplicantRequest("John Doe", "010-9876-5432"))
+                List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
 
         // 예외 발생 확인
-        assertThrows(IllegalArgumentException.class, () -> applicationService.updateApplication(nonExistentId, member, updateRequest));
+        assertThrows(IllegalArgumentException.class, () -> applicationService.updateApplication(nonExistentId, applicant, updateRequest));
     }
 
     @Test
+    @DisplayName("신청을 삭제한다.")
     void testDeleteApplication() {
         // 신청서 생성
         ApplicationRequest applicationRequest = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
-                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789"))
+                List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
-        applicationService.createApplication(applicationRequest, member);
+        applicationService.createApplication(applicationRequest, applicant);
 
         Long applicationId = applicationRepository.findAll().get(0).getId();
 

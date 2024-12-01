@@ -1,6 +1,9 @@
 package com.kyonggi.teampu.domain.application.dto;
+
+import com.kyonggi.teampu.domain.application.domain.Application;
 import com.kyonggi.teampu.domain.application.domain.ApplicationStatus;
-import com.kyonggi.teampu.domain.member.dto.CoParticipantRequest;
+import com.kyonggi.teampu.domain.member.domain.Member;
+import com.kyonggi.teampu.domain.member.dto.CoApplicantRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -26,4 +29,14 @@ public class ApplicationRequest {
     private LocalDate appliedDate; // 날짜
     private List<CoApplicantRequest> coApplicants; // 공동 참여자 목록 (이름, 전화번호)
 
+    public Application toEntity(Member member) {
+        return Application.builder()
+                .appliedDate(appliedDate) // 날짜
+                .startTime(startTime.withSecond(0).withNano(0)) // 시작 시간
+                .endTime(endTime.withSecond(0).withNano(0)) // 종료 시간
+                .status(ApplicationStatus.PENDING) // 기본값 설정
+                .applicantCount(coApplicants.size() + 1) // 신청자 포함 사용 인원 수
+                .applicant(member) // Member 객체만
+                .build();
+    }
 }

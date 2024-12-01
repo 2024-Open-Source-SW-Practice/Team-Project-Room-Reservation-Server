@@ -1,13 +1,12 @@
 package com.kyonggi.teampu.domain.application.service;
 
-import com.kyonggi.teampu.domain.application.domain.ApplicationStatus;
 import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.domain.MemberType;
-import com.kyonggi.teampu.domain.member.dto.CoParticipantRequest;
+import com.kyonggi.teampu.domain.member.dto.CoApplicantRequest;
 import com.kyonggi.teampu.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,9 +60,7 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25), // appliedDate
-                List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")), // coParticipants
-                true, // privacyAgreement
-                ApplicationStatus.PENDING // status
+                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789")) // coParticipants
         );
 
         // 신청서 생성
@@ -92,9 +89,7 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
-                List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")),
-                true,
-                ApplicationStatus.PENDING
+                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789"))
         );
         applicationService.createApplication(applicationRequest, member);
 
@@ -116,9 +111,7 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
-                List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")),
-                true,
-                ApplicationStatus.PENDING
+                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789"))
         );
         applicationService.createApplication(request, member);
         Long applicationId = applicationRepository.findAll().get(0).getId();
@@ -128,9 +121,7 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2025, 1, 15),
-                List.of(new CoParticipantRequest("John Doe", "010-9876-5432")),
-                true,
-                ApplicationStatus.PENDING
+                List.of(new CoApplicantRequest("John Doe", "010-9876-5432"))
         );
 
         // 신청 수정
@@ -139,7 +130,7 @@ public class ApplicationServiceTest {
         // 수정된 신청서 확인
         ApplicationResponse response = applicationService.getDetailApplication(applicationId);
         assertEquals("2025-01-15", response.getAppliedDate().toString());
-        assertEquals(2, response.getCountCpOnly() + 1); // 신청자 본인 + 공동 참여자
+        assertEquals(2, response.getApplicantCount() + 1); // 신청자 본인 + 공동 참여자
         assertEquals(member.getName(), response.getName());
     }
 
@@ -151,9 +142,7 @@ public class ApplicationServiceTest {
                 new ApplicationRequest(
                         LocalDateTime.now(),
                         LocalDateTime.now(),
-                        LocalDate.of(2024, 12, 10), List.of(),
-                        true,
-                        ApplicationStatus.PENDING
+                        LocalDate.of(2024, 12, 10), List.of()
                 ),
                 member
         );
@@ -161,9 +150,7 @@ public class ApplicationServiceTest {
                 new ApplicationRequest(
                         LocalDateTime.now(),
                         LocalDateTime.now(),
-                        LocalDate.of(2024, 12, 15), List.of(),
-                        true,
-                        ApplicationStatus.PENDING
+                        LocalDate.of(2024, 12, 15), List.of()
                 ),
                 member
         );
@@ -191,9 +178,7 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2025, 1, 15),
-                List.of(new CoParticipantRequest("John Doe", "010-9876-5432")),
-                true,
-                ApplicationStatus.PENDING
+                List.of(new CoApplicantRequest("John Doe", "010-9876-5432"))
         );
 
         // 예외 발생 확인
@@ -207,9 +192,7 @@ public class ApplicationServiceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDate.of(2024, 12, 25),
-                List.of(new CoParticipantRequest("Jane Doe", "010-2345-6789")),
-                true,
-                ApplicationStatus.PENDING
+                List.of(new CoApplicantRequest("Jane Doe", "010-2345-6789"))
         );
         applicationService.createApplication(applicationRequest, member);
 

@@ -27,7 +27,7 @@ public class AdminService {
 
         return applicationList.stream()
             .map(application -> new AppliedInfoResponse(
-                application.getMember().getName(),
+                application.getApplicant().getName(),
                 application.getAppliedDate(),
                 application.getStatus()
             ))

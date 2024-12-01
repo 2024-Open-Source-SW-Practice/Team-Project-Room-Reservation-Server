@@ -15,7 +15,7 @@ public class ApplicationResponse {
     private LocalDateTime endTime; // 종료 시간
     private LocalDate appliedDate; // 날짜
     private String name; // 이름
-    private Integer countCpOnly; // 동반 참가자 수만 저장하는 필드
+    private Integer applicantCount; // 동반 참가자 수만 저장하는 필드
 
 
     public static ApplicationResponse fromEntity(Application application){
@@ -23,8 +23,8 @@ public class ApplicationResponse {
                 .startTime(application.getStartTime()) // 시작 시간
                 .endTime(application.getEndTime()) // 종료 시간
                 .appliedDate(application.getAppliedDate()) // 날짜
-                .name(application.getMember().getName()) // 이름
-                .countCpOnly(application.getCoParticipants().size()) // 참여 인원(신청자 제외)
+                .name(application.getApplicant().getName()) // 이름
+                .applicantCount(application.getApplicantCount()) // 참여 인원(신청자 제외)
                 .build();
     }
 

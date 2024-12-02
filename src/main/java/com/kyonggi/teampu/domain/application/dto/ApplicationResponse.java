@@ -38,7 +38,7 @@ public class ApplicationResponse {
 
     @Getter
     @Builder
-    private static class ApplicantResponse {
+    public static class ApplicantResponse {
         private final Long id;
         private final String loginId;
         private final String name;

@@ -114,7 +114,7 @@ public class ApplicationServiceTest {
         // 응답 값 검증
         assertNotNull(response);
         assertEquals("2024-12-25", response.getAppliedDate().toString());
-        assertEquals(applicant.getName(), response.getName());
+        assertEquals(applicant.getName(), response.getApplicant().getName());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ApplicationServiceTest {
         ApplicationResponse response = applicationService.getDetailApplication(applicationId);
         assertEquals("2025-01-15", response.getAppliedDate().toString());
         assertEquals(2, response.getApplicantCount()); // 신청자 본인 + 공동 참여자
-        assertEquals(applicant.getName(), response.getName());
+        assertEquals(applicant.getName(), response.getApplicant().getName());
     }
 
     @Test

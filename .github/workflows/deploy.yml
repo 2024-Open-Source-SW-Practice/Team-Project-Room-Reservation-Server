@@ -35,7 +35,7 @@ jobs:
       - name: Build # JAR 빌드
         run: |
             chmod +x ./gradlew
-            ./gradlew build -Pprofile=cd
+            ./gradlew build -Dspring.profiles.active=cd
 
       - name: Set lowercase repository name without owner environment variable
         run: |

@@ -102,5 +102,7 @@ ext {
 }
 
 bootRun {
-    systemProperty "spring.profiles.active", profile
+    if (project.hasProperty('springProfiles')) {
+        systemProperty 'spring.profiles.active', project.springProfiles
+    }
 }

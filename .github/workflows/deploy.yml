@@ -35,7 +35,7 @@ jobs:
       - name: Build # JAR 빌드
         run: |
             chmod +x ./gradlew
-            ./gradlew build -Dspring.profiles.active=cd
+            ./gradlew build -Dspring.profiles.active=prod
 
       - name: Set lowercase repository name without owner environment variable
         run: |
@@ -84,4 +84,6 @@ jobs:
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SECRET_ACCESS_KEY }}
           passphrase: ${{ secrets.GCP_SECRET_ACCESS_KEY_PASSPHRASE }}
-          script: kubectl apply -f ~/spring-redis/manifest/spring-redis.yml
+          script: |
+            kubectl delete -f ~/spring-redis/manifest/spring-redis.yml
+            kubectl apply -f ~/spring-redis/manifest/spring-redis.yml

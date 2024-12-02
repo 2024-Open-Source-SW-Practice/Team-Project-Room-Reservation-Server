@@ -87,3 +87,11 @@ jobs:
           script: |
             kubectl delete -f ~/spring-redis/manifest/spring-redis.yml
             kubectl apply -f ~/spring-redis/manifest/spring-redis.yml
+            
+
+      - name: Run Database Migration
+        run: ./gradlew flywayMigrate # 마이그레이션 실행, db/migration 폴더의 마이그레이션 파일들을 검사
+        env:
+          SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}

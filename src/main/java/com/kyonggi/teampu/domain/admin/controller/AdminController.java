@@ -2,8 +2,8 @@ package com.kyonggi.teampu.domain.admin.controller;
 
 
 import com.kyonggi.teampu.domain.admin.dto.request.ApproveRequest;
-import com.kyonggi.teampu.domain.admin.dto.response.AppliedInfoResponse;
 import com.kyonggi.teampu.domain.admin.service.AdminService;
+import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.auth.domain.CustomMemberDetails;
 import com.kyonggi.teampu.global.response.ApiResponse;
 import java.util.List;
@@ -26,15 +26,15 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @GetMapping("/home")
-    public ApiResponse<List<AppliedInfoResponse>> getHome(){
-        return ApiResponse.ok(adminService.getHome());
+    @GetMapping("/applications")
+    public ApiResponse<List<ApplicationResponse>> findApplications(){
+        return ApiResponse.ok(adminService.findApplications());
     }
 
-    @PostMapping("/approve")
+    @PostMapping("/applications/status")
     public ApiResponse<Void> updateStatus(@RequestBody ApproveRequest request,
                                     @AuthenticationPrincipal CustomMemberDetails customMemberDetails){
-        adminService.approve(request, customMemberDetails.getMember());
+        adminService.updateStatus(request, customMemberDetails.getMember());
 
         return ApiResponse.ok();
     }

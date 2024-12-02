@@ -53,4 +53,8 @@ public class Member {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 }

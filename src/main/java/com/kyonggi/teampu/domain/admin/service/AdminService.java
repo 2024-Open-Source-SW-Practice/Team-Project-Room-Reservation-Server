@@ -10,7 +10,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+import java.util.List;
+
+import static com.kyonggi.teampu.global.exception.ErrorCode.APPLICATION_NOT_FOUND;
+import static com.kyonggi.teampu.global.exception.ErrorCode.NOT_ADMIN;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,14 +31,13 @@ public class AdminService {
                 )).toList();
     }
 
-    public void approve(ApproveRequest request, Member connectedMember){
-        if (!connectedMember.getIsAdmin()) throw new RuntimeException(NOT_ADMIN.getMessage());
+    public void updateStatus(ApproveRequest request, Member connectedMember) {
+        if (!connectedMember.isAdmin()) throw new IllegalStateException(NOT_ADMIN.getMessage());
 
-        Application application = applicationRepository.findById(request.getApplicationId()).get();
+        Application application = applicationRepository.findById(request.getApplicationId())
+                .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
         application.updateStatus(request.getStatus());
     }
-
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.kyonggi.teampu.domain.coApplicant.domain;
+package com.kyonggi.teampu.domain.applicant.domain;
 
 import com.kyonggi.teampu.domain.application.domain.Application;
 import com.kyonggi.teampu.domain.member.domain.Member;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CoApplicant {
+public class Applicant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

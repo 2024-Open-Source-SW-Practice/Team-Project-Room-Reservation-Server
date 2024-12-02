@@ -98,7 +98,7 @@ test {
 }
 
 ext {
-    profile = project.hasProperty('profile') ? project.getProperty('profile') : 'ci'
+    profile = project.hasProperty('profile') ? project.getProperty('profile') : 'local'
 }
 
 bootRun {

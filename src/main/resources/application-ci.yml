@@ -23,6 +23,11 @@ spring:
   jwt:
     secret: FJDNSKN4329JHVUYV2413YGUVFIFDKBGFJTDGFKBEQRFKBJHDVKVFKJSDHLUGKUYTFYTDRTEUFTF
 
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
+  allowed-headers: "*"
+
 logging:
   level:
     org.hibernate.SQL: OFF

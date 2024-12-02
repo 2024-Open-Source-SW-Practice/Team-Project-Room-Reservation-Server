@@ -55,7 +55,12 @@ public class SecurityConfig {
         http.cors((cors) -> cors
                 .configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
+                    configuration.setAllowedOrigins(Arrays.asList(
+                            "http://localhost:3000",
+                            "http://localhost:5173",
+                            "http://localhost:8080",
+                            "https://team-pu.vercel.app"
+                    ));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));

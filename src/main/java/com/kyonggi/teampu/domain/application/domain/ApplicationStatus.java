@@ -13,6 +13,10 @@ public enum ApplicationStatus {
         this.code = code;
     }
 
+    public boolean isUpdatable() {
+        return this == PENDING;
+    }
+
     @JsonValue
     public String getCode() {
         return this.code;

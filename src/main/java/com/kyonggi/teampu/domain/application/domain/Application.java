@@ -1,6 +1,5 @@
 package com.kyonggi.teampu.domain.application.domain;
 
-import com.kyonggi.teampu.domain.member.domain.CoParticipant;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,8 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -36,28 +33,16 @@ public class Application {
     private LocalDate appliedDate;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(name = "status", nullable = false)
     private ApplicationStatus status = ApplicationStatus.PENDING; // 기본값 설정
 
-    @Column(name = "count_cp_with_applicant") // 신청자 포함 사용 인원 수
-    private Integer countCpWithApplicant;
-
-    @Column(name = "count_cp_only") // 신청자 제외 사용 인원 수
-    private Integer countCpOnly;
-
-    @ElementCollection // JPA에서 값 타입 컬렉션을 매핑할 때 사용하는 어노테이션
-    @CollectionTable(
-            name = "application_co_participants",
-            joinColumns = @JoinColumn(name = "application_id")
-    )
-    private List<CoParticipant> coParticipants = new ArrayList<>();
-
-    @Column(name = "privacy_agreement")
-    private Boolean privacyAgreement;
+    @Column(name = "applicant_count") // 신청자 포함 사용 인원 수
+    private Integer applicantCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member applicant;
 
     public void updateStatus(ApplicationStatus status){
         this.status = status;

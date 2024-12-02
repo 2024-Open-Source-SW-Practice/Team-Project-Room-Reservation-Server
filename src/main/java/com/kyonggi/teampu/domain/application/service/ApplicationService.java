@@ -5,104 +5,86 @@ import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
-import com.kyonggi.teampu.domain.member.domain.CoParticipant;
+import com.kyonggi.teampu.domain.applicant.domain.Applicant;
+import com.kyonggi.teampu.domain.applicant.repository.ApplicantRepository;
 import com.kyonggi.teampu.domain.member.domain.Member;
+import com.kyonggi.teampu.domain.member.dto.CoApplicantRequest;
+import com.kyonggi.teampu.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.kyonggi.teampu.domain.application.dto.ApplicationResponse.fromEntity;
+import static com.kyonggi.teampu.global.exception.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
+    private final ApplicantRepository applicantRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void createApplication(ApplicationRequest applicationRequest, Member member) {
-        // GET 메서드를 별도로 구현할 예정이라 void 처리
-
-        /**
-         * 1. 사용자의 정보(이름, 학번, 전화번호, 이메일) 추출
-         * 2. 사용자가 직접 정보 입력(날짜, 명단: 이름, 전화번호, 개인정보 동의)
-         * 3. 사용 인원 계산
-         */
-
-        List<CoParticipant> coParticipants = applicationRequest.getCoParticipants().stream()
-                .map(CoParticipant::from)
-                .collect(Collectors.toList());
-
-        // Application.builder()를 사용하여 로그인한 사용자 정보와 입력받은 정보를 결합
-        Application application = Application.builder()
-                .member(member) // Member 객체만
-                .appliedDate(applicationRequest.getAppliedDate()) // 날짜
-                .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
-                .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
-                .coParticipants(coParticipants) // 명단(이름, 전화번호)
-                .countCpWithApplicant(applicationRequest.getCoParticipants().size()+1) // 신청자 포함 사용 인원 수
-                .countCpOnly(applicationRequest.getCoParticipants().size()) // 신청자 제외 사용 인원 수
-                .privacyAgreement(applicationRequest.getPrivacyAgreement()) // 개인정보 동의
-                .status(applicationRequest.getStatus())
-                .startTime(LocalDateTime.now())
-                .endTime(LocalDateTime.now())
-                .build();
-
+        Application application = applicationRequest.toEntity(member);
         applicationRepository.save(application);
+
+        Applicant applicant = Applicant.builder()
+                .member(member)
+                .application(application)
+                .build();
+        applicantRepository.save(applicant);
+
+        applicationRequest.getCoApplicants()
+                .stream()
+                .map(this::findMemberByNameAndPhoneNumber)
+                .map(coApplicantMember -> Applicant.builder()
+                        .member(coApplicantMember)
+                        .application(application)
+                        .build()
+                ).forEach(applicantRepository::save);
     }
 
     @Transactional
-    public void deleteApplication(Long id){
+    public void deleteApplication(Long id) {
         Application application = applicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
 
         applicationRepository.delete(application);
     }
 
-    @Transactional
-    public ApplicationResponse getDetailApplication(Long id){
+    public ApplicationResponse getDetailApplication(Long id) {
         Application application = applicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
+        List<Member> coApplicants = applicantRepository.findCoApplicantsByApplicationId(id);
 
-        return fromEntity(application);
-
+        return fromEntity(application, coApplicants);
     }
 
     @Transactional
-    public void updateApplication(Long id, Member member, ApplicationRequest applicationRequest){
+    public void updateApplication(Long id, Member member, ApplicationRequest applicationRequest) {
         Application application = applicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("신청서를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
 
-        // PATCH를 사용했기 떄문에 널이 아닌 필드만 업데이트 하는 로직이 필요함
-        LocalDate appliedDate = applicationRequest.getAppliedDate() != null ?
-                applicationRequest.getAppliedDate() : application.getAppliedDate();
+        if (!application.getStatus().isUpdatable()) {
+            throw new IllegalStateException(APPLICATION_ALREADY_APPROVED.getMessage());
+        }
 
-        List<CoParticipant> coParticipants = applicationRequest.getCoParticipants() != null ?
-                applicationRequest.getCoParticipants().stream()
-                        .map(CoParticipant::from)
-                        .collect(Collectors.toList()) :
-                application.getCoParticipants();
-
-        // Builder를 사용한 업데이트
         Application updatedApplication = Application.builder()
                 .id(application.getId())
-                .member(application.getMember())  // 기존 member 정보 유지
-                .appliedDate(appliedDate) // 날짜
+                .applicant(application.getApplicant())  // 기존 member 정보 유지
+                .appliedDate(applicationRequest.getAppliedDate()) // 날짜
                 .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
                 .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
-                .coParticipants(coParticipants) // 공동 참여자 명단(이름, 전화번호)
-                .countCpWithApplicant(applicationRequest.getCoParticipants().size()+1) // 신청자 포함 사용 인원 수
-                .countCpOnly(applicationRequest.getCoParticipants().size()) // 신청자 제외 사용 인원 수
-                .privacyAgreement(application.getPrivacyAgreement())
+                .applicantCount(application.getApplicantCount()) // 신청자 포함 사용 인원 수
                 .status(application.getStatus()) // 상태
                 .build();
 
@@ -152,5 +134,12 @@ public class ApplicationService {
         }
 
         return new MainPageResponse.CalendarResponseDTO(targetYear, targetMonth, days);
+    }
+
+    private Member findMemberByNameAndPhoneNumber(CoApplicantRequest coApplicantRequest) {
+        return memberRepository.findByNameAndPhoneNumber(
+                coApplicantRequest.getName(),
+                coApplicantRequest.getPhoneNumber()
+        ).orElseThrow(() -> new IllegalArgumentException(MEMBER_NOT_FOUND_BY_NAME_AND_PHONE_NUMBER.getMessage()));
     }
 }

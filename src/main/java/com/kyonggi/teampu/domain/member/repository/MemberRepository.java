@@ -13,5 +13,7 @@ public interface MemberRepository extends Repository<Member, Long> {
 
     Optional<Member> findById(Long id);
 
+    Optional<Member> findByNameAndPhoneNumber(String name, String phoneNumber);
+
     void delete(Member member);
 }

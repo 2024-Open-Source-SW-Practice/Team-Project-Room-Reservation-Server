@@ -40,6 +40,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 test {
@@ -98,7 +102,7 @@ test {
 }
 
 ext {
-    profile = project.hasProperty('profile') ? project.getProperty('profile') : 'local'
+    profile = project.hasProperty('profile') ? project.getProperty('profile') : 'ci'
 }
 
 bootRun {

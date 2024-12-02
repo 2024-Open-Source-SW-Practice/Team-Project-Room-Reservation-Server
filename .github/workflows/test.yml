@@ -71,8 +71,14 @@ jobs:
           min-coverage-changed-files: 0 # 변경된 파일에 대한 최소 코드 커버리지 기준입니다.
           # 따로 설정하지 않으면, 위 두 개 모두 default의 값은 80%입니다.
 
-
-
+      - name: Test with Gradle
+        run: ./gradlew test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/teampu
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: '0000'
+          SPRING_FLYWAY_ENABLED: true # 테스트 실행 시 Flyway 마이그레이션이 동작하도록 함
+          SPRING_JPA_HIBERNATE_DDL_AUTO: validate # Flyway가 테이블 생성을 담당하므로 JPA는 검증만 수행
 
 
 

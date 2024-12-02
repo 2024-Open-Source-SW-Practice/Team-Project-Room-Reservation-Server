@@ -5,8 +5,8 @@ import com.kyonggi.teampu.domain.application.dto.ApplicationRequest;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.dto.MainPageResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
-import com.kyonggi.teampu.domain.coApplicant.domain.CoApplicant;
-import com.kyonggi.teampu.domain.coApplicant.repository.CoApplicantRepository;
+import com.kyonggi.teampu.domain.applicant.domain.Applicant;
+import com.kyonggi.teampu.domain.applicant.repository.ApplicantRepository;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.dto.CoApplicantRequest;
 import com.kyonggi.teampu.domain.member.repository.MemberRepository;
@@ -29,7 +29,7 @@ import static com.kyonggi.teampu.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
-    private final CoApplicantRepository coApplicantRepository;
+    private final ApplicantRepository applicantRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -37,14 +37,20 @@ public class ApplicationService {
         Application application = applicationRequest.toEntity(member);
         applicationRepository.save(application);
 
+        Applicant applicant = Applicant.builder()
+                .member(member)
+                .application(application)
+                .build();
+        applicantRepository.save(applicant);
+
         applicationRequest.getCoApplicants()
                 .stream()
                 .map(this::findMemberByNameAndPhoneNumber)
-                .map(coApplicantMember -> CoApplicant.builder()
+                .map(coApplicantMember -> Applicant.builder()
                         .member(coApplicantMember)
                         .application(application)
                         .build()
-                ).forEach(coApplicantRepository::save);
+                ).forEach(applicantRepository::save);
     }
 
     @Transactional
@@ -58,7 +64,7 @@ public class ApplicationService {
     public ApplicationResponse getDetailApplication(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
-        List<Member> coApplicants = coApplicantRepository.findCoApplicantsByApplicationId(id);
+        List<Member> coApplicants = applicantRepository.findCoApplicantsByApplicationId(id);
 
         return fromEntity(application, coApplicants);
     }

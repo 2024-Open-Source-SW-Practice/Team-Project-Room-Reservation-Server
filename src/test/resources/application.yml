@@ -4,13 +4,17 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate # flyway 적용 시 validate로 설정
 
   data:
     redis:
       host: localhost
       password:
       port: 16379
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
 
   jwt:
     secret: FJDNSKN4329JHVUYV2413YGUVFIFDKBGFJTDGFKBEQRFKBJHDVKVFKJSDHLUGKUYTFYTDRTEUFTF

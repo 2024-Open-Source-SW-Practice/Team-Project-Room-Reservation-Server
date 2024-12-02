@@ -96,3 +96,11 @@ jacocoTestCoverageVerification {
 test {
     useJUnitPlatform()
 }
+
+ext {
+    profile = project.hasProperty('profile') ? project.getProperty('profile') : 'ci'
+}
+
+bootRun {
+    systemProperty "spring.profiles.active", profile
+}

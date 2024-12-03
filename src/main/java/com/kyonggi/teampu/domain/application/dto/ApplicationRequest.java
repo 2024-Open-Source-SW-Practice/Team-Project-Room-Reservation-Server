@@ -1,11 +1,11 @@
 package com.kyonggi.teampu.domain.application.dto;
 
 import com.kyonggi.teampu.domain.application.domain.Application;
-import com.kyonggi.teampu.domain.application.domain.ApplicationStatus;
 import com.kyonggi.teampu.domain.member.domain.Member;
 import com.kyonggi.teampu.domain.member.dto.CoApplicantRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,17 +21,17 @@ import java.util.List;
  */
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationRequest {
     // 로그인 정보를 통해 이름, 학번, 전화번호, 이메일 받아옴
     private LocalDateTime startTime; // 시작 시간
     private LocalDateTime endTime; // 종료 시간
-    private LocalDate appliedDate; // 날짜
     private List<CoApplicantRequest> coApplicants; // 공동 참여자 목록 (이름, 전화번호)
 
     public Application toEntity(Member member) {
         return Application.builder()
-                .appliedDate(appliedDate) // 날짜
+                .appliedDate(LocalDate.now()) // 날짜
                 .startTime(startTime.withSecond(0).withNano(0)) // 시작 시간
                 .endTime(endTime.withSecond(0).withNano(0)) // 종료 시간
                 .applicantCount(coApplicants.size() + 1) // 신청자 포함 사용 인원 수

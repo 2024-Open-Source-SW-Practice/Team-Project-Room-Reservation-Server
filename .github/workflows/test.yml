@@ -24,16 +24,16 @@ jobs:
 
     # MySQL 서비스 컨테이너를 설정
     # GitHub Actions runner에서 실행되는 독립적인 MySQL 환경
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test    # 테스트용 DB 이름을 자유롭게 지정
-        ports:
-          - 3366:3306    # 포트도 자유롭게 변경 가능
-        # MySQL 컨테이너가 완전히 준비되었는지 확인하기 위한 헬스체크 옵션
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#    services:
+#      mysql:
+#        image: mysql:8.0
+#        env:
+#          MYSQL_ROOT_PASSWORD: root
+#          MYSQL_DATABASE: test    # 테스트용 DB 이름을 자유롭게 지정
+#        ports:
+#          - 3366:3306    # 포트도 자유롭게 변경 가능
+#        # MySQL 컨테이너가 완전히 준비되었는지 확인하기 위한 헬스체크 옵션
+#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       # 소스 코드를 체크아웃

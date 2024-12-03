@@ -73,7 +73,6 @@ public class ApplicationServiceTest {
         ApplicationRequest applicationRequest = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                LocalDate.of(2024, 12, 25), // appliedDate
                 List.of(new CoApplicantRequest("member2", "010-1234-5679")) // coParticip9nts
         );
 
@@ -102,7 +101,6 @@ public class ApplicationServiceTest {
         ApplicationRequest applicationRequest = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                LocalDate.of(2024, 12, 25),
                 List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
         applicationService.createApplication(applicationRequest, applicant);
@@ -113,7 +111,7 @@ public class ApplicationServiceTest {
 
         // 응답 값 검증
         assertNotNull(response);
-        assertEquals("2024-12-25", response.getAppliedDate().toString());
+        assertEquals(LocalDate.now().toString(), response.getAppliedDate().toString());
         assertEquals(applicant.getName(), response.getApplicant().getName());
     }
 
@@ -124,7 +122,6 @@ public class ApplicationServiceTest {
         ApplicationRequest request = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                LocalDate.of(2024, 12, 25),
                 List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
         applicationService.createApplication(request, applicant);
@@ -133,8 +130,7 @@ public class ApplicationServiceTest {
         // 수정 요청 생성 (공동 참여자와 날짜만 수정)
         ApplicationRequest updateRequest = new ApplicationRequest(
                 LocalDateTime.now(),
-                LocalDateTime.now(),
-                LocalDate.of(2025, 1, 15),
+                LocalDateTime.now().plusHours(1),
                 List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
 
@@ -143,7 +139,7 @@ public class ApplicationServiceTest {
 
         // 수정된 신청서 확인
         ApplicationResponse response = applicationService.getDetailApplication(applicationId);
-        assertEquals("2025-01-15", response.getAppliedDate().toString());
+        assertEquals(LocalDate.now().toString(), response.getAppliedDate().toString());
         assertEquals(2, response.getApplicantCount()); // 신청자 본인 + 공동 참여자
         assertEquals(applicant.getName(), response.getApplicant().getName());
     }
@@ -156,7 +152,7 @@ public class ApplicationServiceTest {
                 new ApplicationRequest(
                         LocalDateTime.now(),
                         LocalDateTime.now(),
-                        LocalDate.of(2024, 12, 10), List.of()
+                        List.of()
                 ),
                 applicant
         );
@@ -164,7 +160,7 @@ public class ApplicationServiceTest {
                 new ApplicationRequest(
                         LocalDateTime.now(),
                         LocalDateTime.now(),
-                        LocalDate.of(2024, 12, 15), List.of()
+                        List.of()
                 ),
                 applicant
         );
@@ -178,8 +174,7 @@ public class ApplicationServiceTest {
 
         // 12월 10일과 15일 예약 개수 확인
         List<MainPageResponse.DayDTO> days = calendarData.getDays();
-        assertEquals(1, days.stream().filter(day -> day.getDay() == 10).findFirst().get().getReservationCount());
-        assertEquals(1, days.stream().filter(day -> day.getDay() == 15).findFirst().get().getReservationCount());
+        assertEquals(2, days.stream().filter(day -> day.getDay() == LocalDate.now().getDayOfMonth()).findFirst().get().getReservationCount());
     }
 
     @Test
@@ -190,8 +185,7 @@ public class ApplicationServiceTest {
 
         ApplicationRequest updateRequest = new ApplicationRequest(
                 LocalDateTime.now(),
-                LocalDateTime.now(),
-                LocalDate.of(2025, 1, 15),
+                LocalDateTime.now().minusHours(1),
                 List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
 
@@ -206,7 +200,6 @@ public class ApplicationServiceTest {
         ApplicationRequest applicationRequest = new ApplicationRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                LocalDate.of(2024, 12, 25),
                 List.of(new CoApplicantRequest("member2", "010-1234-5679"))
         );
         applicationService.createApplication(applicationRequest, applicant);

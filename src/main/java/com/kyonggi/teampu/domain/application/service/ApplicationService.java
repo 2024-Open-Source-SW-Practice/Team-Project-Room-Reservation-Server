@@ -81,7 +81,7 @@ public class ApplicationService {
         Application updatedApplication = Application.builder()
                 .id(application.getId())
                 .applicant(application.getApplicant())  // 기존 member 정보 유지
-                .appliedDate(applicationRequest.getAppliedDate()) // 날짜
+                .appliedDate(application.getAppliedDate()) // 날짜
                 .startTime(applicationRequest.getStartTime().withSecond(0).withNano(0)) // 시작 시간
                 .endTime(applicationRequest.getEndTime().withSecond(0).withNano(0)) // 종료 시간
                 .applicantCount(application.getApplicantCount()) // 신청자 포함 사용 인원 수
@@ -120,7 +120,7 @@ public class ApplicationService {
 
         // reservationCountByDate에 일별로 몇개의 예약이 있는지 확인 후 put
         for (Application app : applications) {
-            LocalDate appDate = app.getAppliedDate();
+            LocalDate appDate = app.getStartTime().toLocalDate();
             int currentCount = reservationCountByDate.getOrDefault(appDate, 0);
             reservationCountByDate.put(appDate, currentCount + 1);
         }

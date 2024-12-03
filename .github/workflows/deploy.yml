@@ -88,10 +88,11 @@ jobs:
             kubectl delete -f ~/spring-redis/manifest/spring-redis.yml
             kubectl apply -f ~/spring-redis/manifest/spring-redis.yml
             
-
-      - name: Run Database Migration
+      # Flyway를 사용하여 데이터베이스 스키마 변경을 적용
+      - name: Run Database Migration # 새로운 마이그레이션 스크립트를 실행
         run: ./gradlew flywayMigrate # 마이그레이션 실행, db/migration 폴더의 마이그레이션 파일들을 검사
         env:
+          SPRING_PROFILES_ACTIVE: cd
           SPRING_DATASOURCE_URL: jdbc:mysql://${{ secrets.DB_URL }}/teampu
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}

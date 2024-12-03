@@ -2,16 +2,25 @@ spring:
   profiles:
     active: test
 
-  jpa:
-    hibernate:
-      ddl-auto: create-drop # flyway 적용 시 validate로 설정
+datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:13306/teampu
+  username: root
+  password: '0000'
 
-  data:
-    redis:
-      host: localhost
-      password:
-      port: 16379
+jpa:
+  hibernate:
+    ddl-auto: validate # flyway 적용 시 validate로 설정
 
+data:
+  redis:
+    host: localhost
+    password:
+    port: 16379
 
-  jwt:
-    secret: FJDNSKN4329JHVUYV2413YGUVFIFDKBGFJTDGFKBEQRFKBJHDVKVFKJSDHLUGKUYTFYTDRTEUFTF
+flyway:
+  enabled: true
+  locations: classpath:db/migration
+
+jwt:
+  secret: FJDNSKN4329JHVUYV2413YGUVFIFDKBGFJTDGFKBEQRFKBJHDVKVFKJSDHLUGKUYTFYTDRTEUFTF

@@ -110,3 +110,12 @@ bootRun {
         systemProperty 'spring.profiles.active', project.springProfiles
     }
 }
+
+// 원격 배포(CD) 과정의 Gradle 빌드 과정에서의 의존성 문제 관련
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}

@@ -17,6 +17,7 @@ public class ApplicationResponse {
     private LocalDateTime endTime; // 종료 시간
     private LocalDate appliedDate; // 날짜
     private Integer applicantCount; // 동반 참가자 수만 저장하는 필드
+    private String status; // 상태
     private ApplicantResponse applicant; // 이름
     private List<ApplicantResponse> coApplicants; // 공동 참여자 목록 (이름, 전화번호)
 
@@ -32,6 +33,7 @@ public class ApplicationResponse {
                 .appliedDate(application.getAppliedDate()) // 날짜
                 .applicant(ApplicantResponse.fromEntity(application.getApplicant())) // 이름
                 .applicantCount(application.getApplicantCount()) // 참여 인원(신청자 제외)
+                .status(application.getStatus().name()) // 상태
                 .coApplicants(coApplicantResponses) // 공동 참여자 목록
                 .build();
     }

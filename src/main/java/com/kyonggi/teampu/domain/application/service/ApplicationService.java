@@ -64,9 +64,18 @@ public class ApplicationService {
     public ApplicationResponse getDetailApplication(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
-        List<Member> coApplicants = applicantRepository.findCoApplicantsByApplicationId(id);
+        List<Member> coApplicants = applicantRepository.findApplicantsByApplicationId(id);
 
         return fromEntity(application, coApplicants);
+    }
+
+    public List<ApplicationResponse> findByMember(Member member) {
+        return applicationRepository.findByMemberId(member.getId())
+                .stream()
+                .map(application -> fromEntity(
+                        application,
+                        applicantRepository.findApplicantsByApplicationId(application.getId())
+                )).toList();
     }
 
     @Transactional

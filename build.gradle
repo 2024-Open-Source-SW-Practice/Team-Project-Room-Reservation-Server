@@ -48,6 +48,13 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql'
 }
 
+flyway {
+    url = 'jdbc:mysql://${DB_HOST}:3306/teampu'
+    user = 'root'
+    password = '${DB_PASSWORD}'
+    locations = ['classpath:db/migration']
+}
+
 test {
     finalizedBy jacocoTestReport, jacocoTestCoverageVerification
     useJUnitPlatform()

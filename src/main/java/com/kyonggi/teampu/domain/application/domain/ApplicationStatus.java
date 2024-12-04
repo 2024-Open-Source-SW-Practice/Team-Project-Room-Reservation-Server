@@ -7,10 +7,10 @@ public enum ApplicationStatus {
     APPROVED("approved"),
     REJECTED("rejected");
 
-    private final String code;
+    private final String name;
 
-    ApplicationStatus(String code) {
-        this.code = code;
+    ApplicationStatus(String name) {
+        this.name = name;
     }
 
     public boolean isUpdatable() {
@@ -18,8 +18,8 @@ public enum ApplicationStatus {
     }
 
     @JsonValue
-    public String getCode() {
-        return this.code;
+    public String getName() {
+        return this.name;
     }
 
 }

@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 public class ApproveRequest {
     private Long applicationId;
-    private ApplicationStatus status;
+    private String status;
 }

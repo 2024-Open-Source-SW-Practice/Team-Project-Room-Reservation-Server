@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/apply")
 @RequiredArgsConstructor
@@ -58,6 +60,13 @@ public class ApplicationController {
         ApplicationResponse applicationResponse = applicationService.getDetailApplication(id);
 
         return ApiResponse.ok(applicationResponse);
+    }
+
+    @GetMapping("/my")
+    public ApiResponse<List<ApplicationResponse>> findApplicationsByMember(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        return ApiResponse.ok(applicationService.findByMember(customMemberDetails.getMember()));
     }
 
     @PatchMapping("/{id}")

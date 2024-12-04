@@ -3,6 +3,7 @@ package com.kyonggi.teampu.domain.admin.service;
 import com.kyonggi.teampu.domain.admin.dto.request.ApproveRequest;
 import com.kyonggi.teampu.domain.applicant.repository.ApplicantRepository;
 import com.kyonggi.teampu.domain.application.domain.Application;
+import com.kyonggi.teampu.domain.application.domain.ApplicationStatus;
 import com.kyonggi.teampu.domain.application.dto.ApplicationResponse;
 import com.kyonggi.teampu.domain.application.repository.ApplicationRepository;
 import com.kyonggi.teampu.domain.member.domain.Member;
@@ -27,7 +28,7 @@ public class AdminService {
                 .stream()
                 .map(application -> ApplicationResponse.fromEntity(
                         application,
-                        applicantRepository.findCoApplicantsByApplicationId(application.getId())
+                        applicantRepository.findApplicantsByApplicationId(application.getId())
                 )).toList();
     }
 
@@ -36,7 +37,7 @@ public class AdminService {
 
         Application application = applicationRepository.findById(request.getApplicationId())
                 .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
-        application.updateStatus(request.getStatus());
+        application.updateStatus(ApplicationStatus.valueOf(request.getStatus()));
     }
 
 

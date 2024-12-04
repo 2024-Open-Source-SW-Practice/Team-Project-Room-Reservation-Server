@@ -10,6 +10,7 @@ spring:
     locations: classpath:db/migration
 
   jpa:
+    defer-datasource-initialization: false
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: validate # flyway 적용 시 validate로 설정

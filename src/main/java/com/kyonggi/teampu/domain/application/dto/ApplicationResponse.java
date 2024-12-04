@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Builder
 public class ApplicationResponse {
+    private Long id;
     private LocalDateTime startTime; // 시작 시간
     private LocalDateTime endTime; // 종료 시간
     private LocalDate appliedDate; // 날짜
@@ -28,6 +29,7 @@ public class ApplicationResponse {
                 .toList();
 
         return ApplicationResponse.builder()
+                .id(application.getId())
                 .startTime(application.getStartTime()) // 시작 시간
                 .endTime(application.getEndTime()) // 종료 시간
                 .appliedDate(application.getAppliedDate()) // 날짜

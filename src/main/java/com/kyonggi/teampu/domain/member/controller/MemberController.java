@@ -50,10 +50,11 @@ public class MemberController {
         return ApiResponse.ok(memberDTO);
     }
 
-    @PatchMapping("/profile/{login_id}")
+    @PatchMapping("/profile")
     public ApiResponse<MyPageResponse.MyPageDTO> updateProfile(
-            @PathVariable("login_id") String loginId,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @RequestBody MyPageRequest.UpdateProfileDTO updateRequest) {
+        String loginId = customMemberDetails.getMember().getLoginId();
         MyPageResponse.MyPageDTO updatedMember = memberService.updateProfile(loginId, updateRequest);
         return ApiResponse.ok(updatedMember);
     }

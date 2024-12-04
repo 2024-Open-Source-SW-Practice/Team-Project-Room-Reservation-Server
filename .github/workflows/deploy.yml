@@ -41,16 +41,6 @@ jobs:
             chmod +x ./gradlew
             ./gradlew build -Dspring.profiles.active=cd
 
-      # Flyway를 사용하여 데이터베이스 스키마 변경을 적용
-      - name: Run Database Migration # 새로운 마이그레이션 스크립트를 실행
-        env:
-          SPRING_PROFILES_ACTIVE: cd
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_USERNAME: root
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_URL: jdbc:mysql://${{ secrets.DB_HOST }}:3306/teampu
-        run: ./gradlew flywayMigrate
-
       - name: Set lowercase repository name without owner environment variable
         run: |
             echo "REPOSITORY_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]' | cut -d'/' -f2)" >> $GITHUB_ENV

@@ -41,6 +41,16 @@ jobs:
             chmod +x ./gradlew
             ./gradlew build -Dspring.profiles.active=cd
 
+      # Flyway를 사용하여 데이터베이스 스키마 변경을 적용
+      - name: Run Database Migration # 새로운 마이그레이션 스크립트를 실행
+        run: ./gradlew flywayMigrate
+        env:
+          SPRING_PROFILES_ACTIVE: cd
+          SPRING_DATASOURCE_URL: jdbc:mysql://${{ secrets.DB_HOST }}:3306/teampu
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          FLYWAY_BASELINE_ON_MIGRATE: "true"
+
       - name: Set lowercase repository name without owner environment variable
         run: |
             echo "REPOSITORY_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]' | cut -d'/' -f2)" >> $GITHUB_ENV
@@ -80,22 +90,6 @@ jobs:
           overwrite: true
           source: ./manifest/spring-redis.yml
           target: ~/spring-redis
-
-      # Flyway를 사용하여 데이터베이스 스키마 변경을 적용
-      - name: Run Database Migration # 새로운 마이그레이션 스크립트를 실행
-        run: ./gradlew flywayMigrate
-        env:
-          SPRING_PROFILES_ACTIVE: cd
-          SPRING_DATASOURCE_URL: jdbc:mysql://${{ secrets.DB_HOST }}:3306/teampu
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          FLYWAY_BASELINE_ON_MIGRATE: "true"
-
-      # Gradle 캐시를 초기화하고 모든 의존성을 새로 다운로드하여 빌드
-      - name: Build with Gradle
-        run: |
-          ./gradlew clean build --refresh-dependencies
-
 
       - name: Connect to GCP with SSH
         uses: appleboy/ssh-action@v0.1.8

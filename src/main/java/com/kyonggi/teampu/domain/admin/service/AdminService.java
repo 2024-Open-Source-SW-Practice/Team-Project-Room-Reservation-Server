@@ -28,7 +28,7 @@ public class AdminService {
                 .stream()
                 .map(application -> ApplicationResponse.fromEntity(
                         application,
-                        applicantRepository.findApplicantsByApplicationId(application.getId())
+                        applicantRepository.findMembersByApplicationId(application.getId())
                 )).toList();
     }
 

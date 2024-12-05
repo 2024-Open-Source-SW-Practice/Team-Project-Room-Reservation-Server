@@ -49,7 +49,6 @@ public class ApplicationController {
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteApplication(@PathVariable Long id) {
-
         applicationService.deleteApplication(id);
 
         return ApiResponse.ok();

@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     @Query("SELECT ca.member FROM Applicant ca JOIN ca.application a WHERE a.id = :applicationId")
-    List<Member> findApplicantsByApplicationId(@Param("applicationId") Long applicationId);
-}
+    List<Member> findMembersByApplicationId(@Param("applicationId") Long applicationId);

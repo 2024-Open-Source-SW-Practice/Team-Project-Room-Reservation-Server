@@ -11,3 +11,7 @@ import java.util.List;
 public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     @Query("SELECT ca.member FROM Applicant ca JOIN ca.application a WHERE a.id = :applicationId")
     List<Member> findMembersByApplicationId(@Param("applicationId") Long applicationId);
+
+    @Query("select a from Applicant a where a.application.id = ?1")
+    List<Applicant> findApplicantsByApplicationId(Long id);
+}

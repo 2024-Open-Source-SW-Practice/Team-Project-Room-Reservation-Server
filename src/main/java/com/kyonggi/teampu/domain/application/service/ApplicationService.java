@@ -58,13 +58,14 @@ public class ApplicationService {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
 
+        applicantRepository.deleteAll(applicantRepository.findApplicantsByApplicationId(id));
         applicationRepository.delete(application);
     }
 
     public ApplicationResponse getDetailApplication(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(APPLICATION_NOT_FOUND.getMessage()));
-        List<Member> coApplicants = applicantRepository.findApplicantsByApplicationId(id);
+        List<Member> coApplicants = applicantRepository.findMembersByApplicationId(id);
 
         return fromEntity(application, coApplicants);
     }
@@ -74,7 +75,7 @@ public class ApplicationService {
                 .stream()
                 .map(application -> fromEntity(
                         application,
-                        applicantRepository.findApplicantsByApplicationId(application.getId())
+                        applicantRepository.findMembersByApplicationId(application.getId())
                 )).toList();
     }
 

@@ -39,7 +39,7 @@ TeamPu는 학우들의 편의성과 효율성을 극대화하기 위해 설계�
 | **Category**      | **Details**                          |
 |--------------------|--------------------------------------|
 | **Language**       | Java                         |
-| **Framework / Tech Stack**| Spring, JPA, MySQL,Redis           |
+| **Framework / Tech Stack**| Spring, JPA, MySQL, Redis           |
 | **Tools**          | Git, InteliJ, Figma, Discord               |
 
 ### Infrastructure

@@ -56,10 +56,10 @@ TeamPu는 학우들의 편의성과 효율성을 극대화하기 위해 설계�
 |--------------------|--------------------------------------|
 | 19 정재우         | `Backend Lead`          |
 | 20 이유성         | `Backend` `Infrastructure`              |
-| 20 김진형         | `Backend` `Infrastructure`               |
+| 20 김진형         | `Backend` `Team Lead`               |
 | 20 이정근         | `Infrastructure Lead`             |
 | 21 김아현         | `Backend` `Infrastructure`              |
-| 23 한유진         | `Frontend`              |
+| 23 한유진         | `Frontend Lead`              |
 
 ## ⚙️ 전체 시스템 실행 방법
 

@@ -8,8 +8,8 @@
 
 ## 🖥️  프로젝트 개요
 
-오픈소스SW실습 팀프로젝트로 출발한 이 프로젝트는,<br>
-TeamPu는 학우들의 편의성과 효율성을 극대화하기 위해 설계된<br>
+오픈소스SW실습 팀프로젝트로 출발한 TeamPu는<br>
+학우들의 편의성과 효율성을 극대화하기 위해 설계된<br>
 컴퓨터공학전공 팀프로젝트실 위한 야간잔류 신청 시스템입니다.
 
 
@@ -40,7 +40,7 @@ TeamPu는 학우들의 편의성과 효율성을 극대화하기 위해 설계�
 |--------------------|--------------------------------------|
 | **Language**       | Java                         |
 | **Framework / Tech Stack**| Spring, JPA, MySQL, Redis, nGrinder           |
-| **Tools**          | Git, InteliJ, Figma, Discord               |
+| **Tools**          | Git, InteliJ, Figma               |
 
 ### Infrastructure
 
@@ -49,6 +49,13 @@ TeamPu는 학우들의 편의성과 효율성을 극대화하기 위해 설계�
 | **Server**          | GCP, GCS |
 | **CI / CD**          | Github Actions, K3S, JACOCO |
 | **Database**          | Flyway        |
+
+## 👷 CI/CD Pipeline
+![image](https://github.com/user-attachments/assets/b3b3f02e-d9f5-478a-afe5-0e01d1988e8b)
+
+## 🔀 Server Pipeline
+![image](https://github.com/user-attachments/assets/05567c33-f3a2-4a7c-9e68-82e5e5023dad)
+
 
 ## 👥 개발 참여 인원
 
@@ -84,6 +91,7 @@ TeamPu는 학우들의 편의성과 효율성을 극대화하기 위해 설계�
     <td><img src="https://github.com/user-attachments/assets/0a342635-c68f-4b0b-87e4-ed4bc0c951ca"></td>
   </tr>
 </table>
+
 
 
 

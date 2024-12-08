@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db: # MySQL 서비스
+    image: mysql:8.0.33
+    restart: always
+    container_name: mysql-container
+    ports:
+      - 13306:3306
+    environment: # 환경 변수 설정
+      - MYSQL_DATABASE=teampu
+      - MYSQL_ROOT_PASSWORD=0000 # MYSQL 패스워드 설정
+      - TZ=Asia/Seoul
+    command: # 명령어 실행
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  redis:
+    image: redis:6.2.4-alpine
+    container_name: redis-container
+    restart: always
+    ports:
+      - 16379:6379
+    environment:
+      - REDIS_HOST=localhost
+      - REDIS_PASSWORD=
+      - REDIS_PORT=16379
+      - TZ=Asia/Seoul
+
+  controller:
+    image: ngrinder/controller
+    restart: always
+    ports:
+      - "9000:80"
+      - "16001:16001"
+      - "12000-12009:12000-12009"
+    volumes:
+      - ./ngrinder-controller:/opt/ngrinder-controller
+
+  agent:
+    image: ngrinder/agent
+    restart: always
+    links:
+      - controller

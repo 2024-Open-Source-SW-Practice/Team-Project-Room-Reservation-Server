@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'jacoco'
+    id 'org.flywaydb.flyway' version '10.0.0'
 }
 
 group = 'com.kyonggi'
@@ -12,6 +14,7 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
+
 
 configurations {
     compileOnly {
@@ -25,14 +28,103 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    implementation 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
-tasks.named('test') {
+flyway {
+    url = 'jdbc:mysql://${DB_HOST}:3306/teampu'
+    user = 'root'
+    password = '${DB_PASSWORD}'
+    locations = ['classpath:db/migration']
+}
+
+test {
+    finalizedBy jacocoTestReport, jacocoTestCoverageVerification
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            "**/*Application*",
+                            "**/*Controller*",
+                            "**/*Config*",
+                            "**/*Dto*",
+                            "**/*Request*",
+                            "**/*Response*",
+                            "**/*Interceptor*",
+                            "**/*Exception*",
+                            "**/*Filter*",
+                            "**/*Reissue*",
+                            "**/*Util*",
+                            "**/*CustomMemberDetails*",
+                            "**/*Refresh*",
+                    ])
+                })
+        )
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+
+            excludes = [
+                    '*.test.*'
+            ]
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+ext {
+    profile = project.hasProperty('profile') ? project.getProperty('profile') : 'ci'
+}
+
+bootRun {
+    if (project.hasProperty('springProfiles')) {
+        systemProperty 'spring.profiles.active', project.springProfiles
+    }
+}
+
+// 원격 배포(CD) 과정의 Gradle 빌드 과정에서의 의존성 문제 관련
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
 }

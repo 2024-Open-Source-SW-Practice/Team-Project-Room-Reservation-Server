@@ -1,0 +1,85 @@
+name: Java CI
+
+# 워크플로우 트리거 조건 설정
+on:
+  pull_request:
+    # develop 브랜치에 대한 PR일 때만 실행
+    branches: [ develop ]
+    # 다음 파일들이 변경되었을 때는 워크플로우를 실행하지 않음
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+
+# GitHub Actions 워크플로우의 권한 설정
+permissions:
+  # 리포지토리 콘텐츠에 대한 읽기 권한만 부여
+  contents: read
+  pull-requests: write # PR 코멘트를 위한 권한 추가
+
+jobs:
+  build:
+    # Ubuntu 최신 버전에서 실행
+    runs-on: ubuntu-latest
+
+    # MySQL 서비스 컨테이너를 설정
+    # GitHub Actions runner에서 실행되는 독립적인 MySQL 환경
+#    services:
+#      mysql:
+#        image: mysql:8.0
+#        env:
+#          MYSQL_ROOT_PASSWORD: root
+#          MYSQL_DATABASE: test    # 테스트용 DB 이름을 자유롭게 지정
+#        ports:
+#          - 3366:3306    # 포트도 자유롭게 변경 가능
+#        # MySQL 컨테이너가 완전히 준비되었는지 확인하기 위한 헬스체크 옵션
+#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      # 소스 코드를 체크아웃
+      - uses: actions/checkout@v3
+
+      # 도커 컴포즈를 통한 컨테이너 실행 (개발환경 전용)(빌드 테스트 통과 목적)
+      - name: Install Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      - name: Start Docker-compose
+        working-directory: ./
+        run: docker-compose up -d
+
+      - name: Wait For MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            nc -z localhost 13306 && echo "MySQL is ready!" && exit 0
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+          echo "MySQL did not become ready in time!" && exit 1
+
+      # JDK 17 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Gradle wrapper에 실행 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      # 빌드와 테스트를 함께 실행
+      - name: Build and Test with Gradle
+        run: ./gradlew clean build
+        shell: bash
+
+      - name: Test Coverage Report
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6
+        with:
+          title: Test Coverage Report
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 0 # 프로젝트 전체 테스트 커버리지에 대한 최소 코드 커버리지 기준
+          min-coverage-changed-files: 0 # 변경된 파일에 대한 최소 코드 커버리지 기준입니다.
+          # 따로 설정하지 않으면, 위 두 개 모두 default의 값은 80%입니다.

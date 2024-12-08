@@ -1,0 +1,59 @@
+# 서비스
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-server
+  labels:
+    app: spring-server
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: spring-server
+
+# 디플로이먼트
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-server
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: spring-server
+  template:
+    metadata:
+      labels:
+        app: spring-server
+    spec:
+      containers:
+        - name: spring-server
+          image: rokgeun/teampu-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: db-config
+                key: DB_HOST
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: DB_PASSWORD
+
+        - name: redis
+          image: redis:6.2.4-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6379

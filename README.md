@@ -1,75 +1,100 @@
-## Convention 📠 
-___
-### Branch Naming Convention 🤝
-
-| 머릿말  | 설명                               |
-| ------- | ---------------------------------- |
-| main    | 서비스 브랜치                      |
-| develop | 배포 전 작업 기준                  |
-| feat | 기능 단위 구현                     |
-| hotfix  | 서비스 중 긴급 수정 건에 대한 처리 |
-
-<details>
-<summary>Branch Naming Convention Detail</summary>
-<div markdown="1">
-
-```
-master(main) ── develop ── feature
-└── hotfix
-```
-
-- [ ] [깃 플로우](https://techblog.woowahan.com/2553/)를 베이스로 하여 프로젝트 사이즈에 맞게 재정의했습니다.
-- [ ] 브랜치 이름은 `cabab-case`를 따릅니다.
-- [ ] 이슈 번호는 가장 마지막에 적습니다.
-
-#### master(main)
-
-- [ ] 실제 서비스가 이루어지는 브랜치입니다.
-- [ ] 이 브랜치를 기준으로 develop 브랜치가 분기됩니다.
-- [ ] 배포 중, 긴급하게 수정할 건이 생길시 hotfix 브랜치를 만들어 수정합니다.
-
-#### develop
-
-- [ ] 개발, 테스트, 릴리즈 등 배포 전 작업의 기준이 되는 브랜치입니다.
-- [ ] 해당 브랜치를 default로 설정합니다.
-- [ ] 이 브랜치에서 feature 브랜치가 분기됩니다.
-
-#### feature
-
-- [ ] 개별 개발자가 맡은 작업을 개발하는 브랜치입니다.
-- [ ] feat/(feat-name) 과 같이 머릿말을 feat, 꼬릿말을 개발하는 기능으로 명명합니다.
-- [ ] feat-name의 경우 cabab-case를 따릅니다.
-- [ ] ex) feat/login-validation-#23
-
-#### hotfix
-
-- [ ] 서비스 중 긴급히 수정해야 할 사항이 발생할 때 사용합니다.
-- [ ] master에서 분기됩니다.
-
-</div>
-</details>
-
-### Commit Convention 🤝
-
-| 머릿말           | 설명                                                                      |
-| ---------------- | ------------------------------------------------------------------------- |
-| feat             | 새로운 기능 추가                                                          |
-| fix              | 버그 수정                                                                 |
-| design           | CSS 등 사용자 UI 디자인 변경                                              |
-| !BREAKING CHANGE | 커다란 API 변경의 경우                                                    |
-| !HOTFIX          | 코드 포맷 변경, 세미 콜론 누락, 코드 수정이 없는 경우                     |
-| refactor         | 프로덕션 코드 리팩토링업                                                  |
-| comment          | 필요한 주석 추가 및 변경                                                  |
-| docs             | 문서 수정                                                                 |
-| test             | 테스트 추가, 테스트 리팩토링(프로덕션 코드 변경 X)                        |
-| setting          | 패키지 설치, 개발 설정                                                    |
-| chore            | 빌드 테스트 업데이트, 패키지 매니저를 설정하는 경우(프로덕션 코드 변경 X) |
-| rename           | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우                        |
-| remove           | 파일을 삭제하는 작업만 수행한 경우                                        |
+<img src="https://github.com/user-attachments/assets/abec3805-cd45-4d3d-99ae-638e38b00fcb" width="200px">
 
 
-- 예) feat: 로그인 기능 추가 - #2
+## TeamPu : 팀프실 야간잔류 신청 시스템
+
+컴퓨터공학전공 팀프로젝트실 야간잔류 신청이 번거롭지 않으셨나요?<br>
+이제는 TeamPu로 편하게 예약하고 사용하세요! 🎉
+
+## 🖥️  프로젝트 개요
+
+오픈소스SW실습 팀프로젝트로 출발한 TeamPu는<br>
+학우들의 편의성과 효율성을 극대화하기 위해 설계된<br>
+컴퓨터공학전공 팀프로젝트실 위한 야간잔류 신청 시스템입니다.
 
 
-</div>
-</details>
+## 🚀 주요 기능
+
+| **기능**      | **설명**                          |
+|--------------------|--------------------------------------|
+| **야간잔류 신청**       | 간단한 절차를 통해 야간 잔류를 신청할 수 있습니다.                          |
+| **실시간 신청 상태 확인**| 현재 신청한 팀의 수를 쉽게 확인할 수 있습니다.         |
+| **나의 신청 내역 확인**          | 내가 예약한 내역을 쉽게 확인할 수 있습니다.                  |
+| **[관리자] 신청 내역 확인**          | 신청된 야간잔류 상세를 확인할 수 있습니다.                  |
+| **[관리자] 야간잔류 승인 및 거부**          | 신청된 야간잔류를 승인, 또는 거부할 수 있습니다.              |
+
+
+## 📂 사용 기술
+
+### Front-end(Client)
+
+| **Category**      | **Details**                          |
+|--------------------|--------------------------------------|
+| **Language**       | JavaScript                          |
+| **Library / Package**| React, TailwindCSS, Axios           |
+| **Tools**          | Git, VS Code, Figma, Discord, Vercel                |
+
+### Back-end(Server)
+
+| **Category**      | **Details**                          |
+|--------------------|--------------------------------------|
+| **Language**       | Java                         |
+| **Framework / Tech Stack**| Spring, JPA, MySQL, Redis, nGrinder           |
+| **Tools**          | Git, InteliJ, Figma               |
+
+### Infrastructure
+
+| **Category**      | **Details**                          |
+|--------------------|--------------------------------------|
+| **Server**          | GCP, GCS |
+| **CI / CD**          | Github Actions, K3S, JACOCO |
+| **Database**          | Flyway        |
+
+## 👷 CI/CD Pipeline
+![image](https://github.com/user-attachments/assets/b3b3f02e-d9f5-478a-afe5-0e01d1988e8b)
+
+## 🔀 Server Pipeline
+![image](https://github.com/user-attachments/assets/05567c33-f3a2-4a7c-9e68-82e5e5023dad)
+
+
+## 👥 개발 참여 인원
+
+| **이름**           | **역할**                            |
+|--------------------|--------------------------------------|
+| 19 정재우         | `Backend Lead`          |
+| 20 이유성         | `Backend` `Infrastructure`              |
+| 20 김진형         | `Backend` `Team Lead`               |
+| 20 이정근         | `Infrastructure Lead`             |
+| 21 김아현         | `Backend` `Infrastructure`              |
+| 23 한유진         | `Frontend Lead`              |
+
+## ⚙️ 전체 시스템 실행 방법
+
+### 로컬 서버 실행
+
+- `git clone https://github.com/TeamPu/TeamPu-Server.git` 명령어를 통해 원하는 디렉토리에 소스 코드를 다운로드 받습니다.
+- `IntelliJ` 등의 IDE를 통해 프로젝트를 열고, 터미널 루트 경로에서 `docker-compose up -d` 명령어를 통해 DB 환경을 세팅합니다.
+- 이후 `TeamPuApplication.java` 클래스를 실행하면 `localhost:8080` 경로를 통해 다양한 API에 접근할 수 있습니다.
+
+### 배포 서버 실행
+
+- 현재 저희 배포 서버는 <a href="https://www.team-pu.site" target="_blank">해당 링크</a> 를 통해 상시 접속할 수 있습니다.
+- 현재 Github Actions을 통한 CI/CD, GCP, K3S를 통한 무중단 배포를 적용한 상태입니다. 24시간 중단 없이 서버를 구동 중에 있습니다.
+- 서버 환경설정 및 조작은 GCE 관리자 계정을 통해 가능합니다.
+
+## 🌟 미리보기
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/f70426cb-7679-4a88-9e6d-3159a7ba94b5"></td>
+    <td><img src="https://github.com/user-attachments/assets/0bb0f598-9e9b-468c-8d66-d90bd02474b3"></td>
+    <td><img src="https://github.com/user-attachments/assets/0a342635-c68f-4b0b-87e4-ed4bc0c951ca"></td>
+  </tr>
+</table>
+
+
+
+
+
+
+
